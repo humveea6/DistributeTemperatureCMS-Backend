@@ -3,14 +3,14 @@ package com.softwareengineering.temperaturecms.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserInfoExample {
+public class UserExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public UserInfoExample() {
+    public UserExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

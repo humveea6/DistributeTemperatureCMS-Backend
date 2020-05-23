@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.softwareengineering.temperaturecms.dao.UserInfoMapper">
-  <resultMap id="BaseResultMap" type="com.softwareengineering.temperaturecms.pojo.UserInfo">
+<mapper namespace="com.softwareengineering.temperaturecms.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.softwareengineering.temperaturecms.pojo.User">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="pass_word" jdbcType="VARCHAR" property="passWord" />
@@ -70,7 +70,7 @@
   <sql id="Base_Column_List">
     id, user_name, pass_word, email, phone, role
   </sql>
-  <select id="selectByExample" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.softwareengineering.temperaturecms.pojo.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -94,19 +94,19 @@
     delete from user_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfoExample">
+  <delete id="deleteByExample" parameterType="com.softwareengineering.temperaturecms.pojo.UserExample">
     delete from user_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfo">
+  <insert id="insert" parameterType="com.softwareengineering.temperaturecms.pojo.User">
     insert into user_info (id, user_name, pass_word, 
       email, phone, role)
     values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfo">
+  <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.User">
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -149,7 +149,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.softwareengineering.temperaturecms.pojo.UserExample" resultType="java.lang.Long">
     select count(*) from user_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -193,7 +193,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.softwareengineering.temperaturecms.pojo.User">
     update user_info
     <set>
       <if test="userName != null">
@@ -214,7 +214,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.softwareengineering.temperaturecms.pojo.UserInfo">
+  <update id="updateByPrimaryKey" parameterType="com.softwareengineering.temperaturecms.pojo.User">
     update user_info
     set user_name = #{userName,jdbcType=VARCHAR},
       pass_word = #{passWord,jdbcType=VARCHAR},

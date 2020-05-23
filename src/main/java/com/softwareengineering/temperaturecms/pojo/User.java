@@ -1,6 +1,6 @@
 package com.softwareengineering.temperaturecms.pojo;
 
-public class UserInfo {
+public class User {
     private Long id;
 
     private String userName;
