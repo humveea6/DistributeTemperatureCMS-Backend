@@ -111,7 +111,7 @@
       #{targetTemperature,jdbcType=DOUBLE}, #{fansSpeed,jdbcType=DOUBLE}, #{fareRate,jdbcType=DOUBLE}, 
       #{startUp,jdbcType=BIGINT}, #{mode,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
     insert into room_status
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

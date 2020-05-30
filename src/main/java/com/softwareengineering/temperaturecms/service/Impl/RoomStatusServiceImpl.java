@@ -51,7 +51,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         roomStatus.setMode(mode);
         roomStatus.setTargetTemperature(targetTemp);
         roomStatus.setFansSpeed(fanSpeed);
-        int insert = roomStatusMapper.insert(roomStatus);
+        int insert = roomStatusMapper.insertSelective(roomStatus);
 
         if(insert>0) {
             return roomStatus.getId();
