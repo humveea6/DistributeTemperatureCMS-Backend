@@ -1,14 +1,10 @@
 package com.softwareengineering.temperaturecms.service.Impl;
 
 import com.softwareengineering.temperaturecms.dao.RoomStatusMapper;
-import com.softwareengineering.temperaturecms.enums.ResponseEnum;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
-import com.softwareengineering.temperaturecms.service.UserRequestService;
-import com.softwareengineering.temperaturecms.utils.WebResultUtil;
-import com.softwareengineering.temperaturecms.vo.ResponseVo;
+import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import static com.softwareengineering.temperaturecms.consts.CMSConst.AC_ON_QUEUE;
@@ -18,7 +14,7 @@ import static com.softwareengineering.temperaturecms.consts.CMSConst.AC_ON_QUEUE
  * Created on 2020-05-30
  */
 @Service
-public class UserRequestServiceImpl implements UserRequestService {
+public class RoomStatusServiceImpl implements RoomStatusService {
 
     @Autowired
     private RoomStatusMapper roomStatusMapper;
@@ -41,7 +37,14 @@ public class UserRequestServiceImpl implements UserRequestService {
         }
     }
 
-    private Integer setData(Long roomId,Integer mode,Double currentTem,Double targetTemp,Double fanSpeed){
+    @Override
+    public RoomStatus getRoomStatusById(Integer id) {
+        RoomStatus roomStatus = roomStatusMapper.selectByPrimaryKey(id);
+
+        return roomStatus;
+    }
+
+    private Integer setData(Long roomId, Integer mode, Double currentTem, Double targetTemp, Double fanSpeed){
         RoomStatus roomStatus = new RoomStatus();
         roomStatus.setCurrentTemperature(currentTem);
         roomStatus.setRoomId(roomId);

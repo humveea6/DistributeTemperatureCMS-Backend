@@ -5,8 +5,11 @@ import com.softwareengineering.temperaturecms.enums.ResponseEnum;
 import com.softwareengineering.temperaturecms.pojo.User;
 import com.softwareengineering.temperaturecms.pojo.UserExample;
 import com.softwareengineering.temperaturecms.service.UserInfoService;
+import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -27,14 +30,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserMapper writeUserMapper;
 
     @Override
-    public ResponseVo<User> register(User user) {
+    public ResponseEntity<String> register(User user) {
         //username不重复
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andUserNameEqualTo(user.getUserName());
         if (readUserMapper.countByExample(userExample) > 0){
 //            throw new RuntimeException("该username已注册");
-            return ResponseVo.error(ResponseEnum.USERNAME_EXIST);
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.USERNAME_EXIST), HttpStatus.OK);
         }
 
         //email不重复
@@ -43,7 +46,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         criteria1.andEmailEqualTo(user.getEmail());
         if(readUserMapper.countByExample(userExample1) > 0){
 //            throw new RuntimeException("该email已被注册");
-            return ResponseVo.error(ResponseEnum.EMAIL_EXIST);
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.EMAIL_EXIST),HttpStatus.OK);
         }
 
         //MD5 摘要
@@ -54,10 +57,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         int resultCount = writeUserMapper.insertSelective(user);
         if (resultCount == 0){
 //            throw  new RuntimeException("注册失败");
-            return ResponseVo.error(ResponseEnum.ERROR);
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.ERROR),HttpStatus.OK);
         }
 
-        return ResponseVo.successByMsg();
+        return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
     }
 
     @Override

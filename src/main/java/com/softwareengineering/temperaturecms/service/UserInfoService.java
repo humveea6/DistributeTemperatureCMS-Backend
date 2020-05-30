@@ -2,6 +2,7 @@ package com.softwareengineering.temperaturecms.service;
 
 import com.softwareengineering.temperaturecms.pojo.User;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
+import org.springframework.http.ResponseEntity;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -11,7 +12,7 @@ public interface UserInfoService {
     /*
     注册
      */
-    ResponseVo<User> register(User user);
+    ResponseEntity<String> register(User user);
     /*
     登录
      */

@@ -4,15 +4,15 @@ spring:
     username: root
     password: g20170040
     url: jdbc:mysql://127.0.0.1:3306/TemperatureCMS?characterEncoding=utf-8&useSSL=false
-#  redis:
-#    host: 127.0.0.1
-#    port: 6379
-  #    timeout: 200
-#  rabbitmq:
-#    addresses: 127.0.0.1
-#    port: 5672
-#    username: guest
-#    password: guest
+  redis:
+    host: 127.0.0.1
+    port: 6379
+      timeout: 200
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 mybatis:
   configuration:

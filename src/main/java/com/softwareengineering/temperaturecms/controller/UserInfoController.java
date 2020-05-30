@@ -6,10 +6,13 @@ import com.softwareengineering.temperaturecms.form.UserLoginform;
 import com.softwareengineering.temperaturecms.form.UserRegisterform;
 import com.softwareengineering.temperaturecms.pojo.User;
 import com.softwareengineering.temperaturecms.service.UserInfoService;
+import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +32,11 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     
     @PostMapping("/register")
-    public ResponseVo<User> register(@Valid @RequestBody UserRegisterform userRegisterform,
-                                     BindingResult bindingResult){
+    public ResponseEntity<String> register(@Valid @RequestBody UserRegisterform userRegisterform,
+                                   BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.error("参数错误,{}",bindingResult.getFieldError().getDefaultMessage());
-            return ResponseVo.error(ResponseEnum.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage());
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage()), HttpStatus.OK);
         }
         User user = new User();
         user.setUserName(userRegisterform.getUsername());
@@ -50,10 +53,10 @@ public class UserInfoController {
     }
 
     @PostMapping("/login")
-    public ResponseVo<User> login(@Valid @RequestBody UserLoginform userLoginform,
+    public ResponseEntity<String> login(@Valid @RequestBody UserLoginform userLoginform,
                                   BindingResult bindingResult, HttpSession httpSession){
         if(bindingResult.hasErrors()){
-            return ResponseVo.error(ResponseEnum.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage());
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage()),HttpStatus.OK);
         }
 
         ResponseVo<User> userResponseVo = userInfoService.login(userLoginform.getUsername(), userLoginform.getPassword());
@@ -61,7 +64,7 @@ public class UserInfoController {
         //session
         httpSession.setAttribute(CMSConst.CURRENT_USER,userResponseVo.getData());
 
-        return userResponseVo;
+        return WebResultUtil.buildResult(userResponseVo,HttpStatus.OK);
     }
 
     @GetMapping("/info")
