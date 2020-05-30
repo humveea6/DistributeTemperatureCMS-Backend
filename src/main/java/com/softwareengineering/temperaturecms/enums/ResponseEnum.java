@@ -22,6 +22,9 @@ public enum ResponseEnum {
 
     USERNAME_OR_PASSWORD_ERROR(11, "用户名或密码错误"),
 
+    AC_ON_FAIL(12,"中央空调启动失败"),
+
+
     ;
     Integer code;
 

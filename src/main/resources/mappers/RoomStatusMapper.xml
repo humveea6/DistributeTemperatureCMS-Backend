@@ -9,6 +9,7 @@
     <result column="fans_speed" jdbcType="DOUBLE" property="fansSpeed" />
     <result column="fare_rate" jdbcType="DOUBLE" property="fareRate" />
     <result column="start_up" jdbcType="BIGINT" property="startUp" />
+    <result column="mode" jdbcType="INTEGER" property="mode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, room_id, current_temperature, target_temperature, fans_speed, fare_rate, start_up
+    id, room_id, current_temperature, target_temperature, fans_speed, fare_rate, start_up, 
+    mode
   </sql>
   <select id="selectByExample" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatusExample" resultMap="BaseResultMap">
     select
@@ -101,13 +103,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
     insert into room_status (id, room_id, current_temperature, 
       target_temperature, fans_speed, fare_rate, 
-      start_up)
+      start_up, mode)
     values (#{id,jdbcType=INTEGER}, #{roomId,jdbcType=BIGINT}, #{currentTemperature,jdbcType=DOUBLE}, 
       #{targetTemperature,jdbcType=DOUBLE}, #{fansSpeed,jdbcType=DOUBLE}, #{fareRate,jdbcType=DOUBLE}, 
-      #{startUp,jdbcType=BIGINT})
+      #{startUp,jdbcType=BIGINT}, #{mode,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
     insert into room_status
@@ -133,6 +135,9 @@
       <if test="startUp != null">
         start_up,
       </if>
+      <if test="mode != null">
+        mode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -155,6 +160,9 @@
       </if>
       <if test="startUp != null">
         #{startUp,jdbcType=BIGINT},
+      </if>
+      <if test="mode != null">
+        #{mode,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="record.startUp != null">
         start_up = #{record.startUp,jdbcType=BIGINT},
       </if>
+      <if test="record.mode != null">
+        mode = #{record.mode,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +212,8 @@
       target_temperature = #{record.targetTemperature,jdbcType=DOUBLE},
       fans_speed = #{record.fansSpeed,jdbcType=DOUBLE},
       fare_rate = #{record.fareRate,jdbcType=DOUBLE},
-      start_up = #{record.startUp,jdbcType=BIGINT}
+      start_up = #{record.startUp,jdbcType=BIGINT},
+      mode = #{record.mode,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +239,9 @@
       <if test="startUp != null">
         start_up = #{startUp,jdbcType=BIGINT},
       </if>
+      <if test="mode != null">
+        mode = #{mode,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -237,7 +252,8 @@
       target_temperature = #{targetTemperature,jdbcType=DOUBLE},
       fans_speed = #{fansSpeed,jdbcType=DOUBLE},
       fare_rate = #{fareRate,jdbcType=DOUBLE},
-      start_up = #{startUp,jdbcType=BIGINT}
+      start_up = #{startUp,jdbcType=BIGINT},
+      mode = #{mode,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

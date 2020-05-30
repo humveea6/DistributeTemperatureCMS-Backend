@@ -6,4 +6,5 @@ package com.softwareengineering.temperaturecms.consts;
  */
 public class CMSConst {
     public static final String CURRENT_USER = "currentUser";
+    public static final String AC_ON_QUEUE = "AC_ON_QUEUE";
 }

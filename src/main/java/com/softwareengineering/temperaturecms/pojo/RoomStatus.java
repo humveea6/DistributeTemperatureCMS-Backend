@@ -15,6 +15,8 @@ public class RoomStatus {
 
     private Long startUp;
 
+    private Integer mode;
+
     public Integer getId() {
         return id;
     }
@@ -69,5 +71,13 @@ public class RoomStatus {
 
     public void setStartUp(Long startUp) {
         this.startUp = startUp;
+    }
+
+    public Integer getMode() {
+        return mode;
+    }
+
+    public void setMode(Integer mode) {
+        this.mode = mode;
     }
 }
