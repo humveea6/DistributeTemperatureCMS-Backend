@@ -1,13 +1,16 @@
 package com.softwareengineering.temperaturecms.service.Impl;
 
 import com.softwareengineering.temperaturecms.dao.RoomStatusMapper;
+import com.softwareengineering.temperaturecms.dto.ChangeTargetTemperatureDto;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
+import com.softwareengineering.temperaturecms.utils.JsonUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import static com.softwareengineering.temperaturecms.consts.CMSConst.AC_ON_QUEUE;
+import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -44,6 +47,31 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         return roomStatus;
     }
 
+    @Override
+    public Integer roomStatusOff(RoomStatus roomStatus) {
+
+        roomStatus.setEndTime(System.currentTimeMillis());
+        return roomStatusMapper.updateByPrimaryKeySelective(roomStatus);
+    }
+
+    @Override
+    public Boolean RequestTemperature(ChangeTargetTemperatureDto changeTargetTemperatureDto) {
+        RoomStatus roomStatus = roomStatusMapper.selectByPrimaryKey(changeTargetTemperatureDto.getId());
+        if(roomStatus == null){
+            return false;
+        }
+        rabbitTemplate.convertAndSend(CHANGE_TARGET_TEMPERATURE_QUEUE, JsonUtils.toJson(changeTargetTemperatureDto));
+
+        return true;
+    }
+
+    @Override
+    public Boolean WriteBack(Integer id){
+        rabbitTemplate.convertAndSend(AC_OFF_QUEUE,id);
+
+        return true;
+    }
+
     private Integer setData(Long roomId, Integer mode, Double currentTem, Double targetTemp, Double fanSpeed){
         RoomStatus roomStatus = new RoomStatus();
         roomStatus.setCurrentTemperature(currentTem);
@@ -51,6 +79,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         roomStatus.setMode(mode);
         roomStatus.setTargetTemperature(targetTemp);
         roomStatus.setFansSpeed(fanSpeed);
+        roomStatus.setStartUp(System.currentTimeMillis());
         int insert = roomStatusMapper.insertSelective(roomStatus);
 
         if(insert>0) {

@@ -24,6 +24,9 @@ public enum ResponseEnum {
 
     AC_ON_FAIL(12,"中央空调启动失败"),
 
+    CHANGE_TARGET_TEMPERATURE_FAIL(13,"修改温度失败"),
+
+    AC_OFF_FAIL(14,"中央空调关机失败"),
 
     ;
     Integer code;
