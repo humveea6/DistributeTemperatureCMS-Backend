@@ -16,4 +16,6 @@ public class CMSConst {
 
     //Redis key
     public final static String ROOM_SERVICE_REDIS_KEY = "room_status_id_%d";
+
+    public final static String CURRENT_FEE_RATE_REDIS_KEY = "CURRENT_FEE_RATE";
 }

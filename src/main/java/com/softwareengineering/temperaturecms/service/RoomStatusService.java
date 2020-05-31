@@ -10,7 +10,7 @@ import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 public interface RoomStatusService {
 
     //开机
-    public Boolean ArrangeService(Long roomId,Double currentTemperature);
+    public Integer ArrangeService(Long roomId,Double currentTemperature);
 
     //更改目标温度
     public Boolean RequestTemperature(ChangeTargetTemperatureDto changeTargetTemperatureDto);
@@ -21,4 +21,9 @@ public interface RoomStatusService {
     public Boolean WriteBack(Integer id);
 
     public Integer roomStatusOff(RoomStatus roomStatus);
+
+    public Double getFee(Integer id);
+
+    //从Redis获取房间实时状况
+    public RoomStatus getRoomStatusFromRedis(Integer id);
 }
