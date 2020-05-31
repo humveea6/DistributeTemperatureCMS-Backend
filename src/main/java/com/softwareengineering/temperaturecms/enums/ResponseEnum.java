@@ -28,6 +28,8 @@ public enum ResponseEnum {
 
     AC_OFF_FAIL(14,"中央空调关机失败"),
 
+    GET_FEE_FAIL(15,"获取费用失败"),
+
     ;
     Integer code;
 

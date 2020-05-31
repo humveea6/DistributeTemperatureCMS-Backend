@@ -50,12 +50,18 @@ public class ResponseVo<T> {
         this.data = data;
     }
 
+    public ResponseVo(Integer status, String msg, T data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
+    }
+
     public static <T> ResponseVo<T> successByMsg(String msg){
         return new ResponseVo<T>(ResponseEnum.SUCCESS.getCode(),msg);
     }
 
     public static <T> ResponseVo<T> success(T data){
-        return new ResponseVo<T>(ResponseEnum.SUCCESS.getCode(),data);
+        return new ResponseVo<T>(ResponseEnum.SUCCESS.getCode(),ResponseEnum.SUCCESS.getDesc(),data);
     }
 
     public static <T> ResponseVo<T> successByMsg(){

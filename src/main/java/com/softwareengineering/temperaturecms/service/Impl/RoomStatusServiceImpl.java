@@ -7,8 +7,11 @@ import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import com.softwareengineering.temperaturecms.utils.JsonUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
 
@@ -25,18 +28,21 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @Override
-    public Boolean ArrangeService(Long roomId, Double currentTemperature) {
+    public Integer ArrangeService(Long roomId, Double currentTemperature) {
         //更新数据库数据
         Integer id = setData(roomId, 1, currentTemperature, 27D, 20D);
 
         //发送对象消息
         if(id > 0) {
             rabbitTemplate.convertAndSend(AC_ON_QUEUE, id);
-            return true;
+            return id;
         }
         else{
-            return false;
+            return -1;
         }
     }
 
@@ -70,6 +76,36 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         rabbitTemplate.convertAndSend(AC_OFF_QUEUE,id);
 
         return true;
+    }
+
+    @Override
+    public Double getFee(Integer id) {
+        RoomStatus roomStatus = roomStatusMapper.selectByPrimaryKey(id);
+        if(roomStatus.getEndTime().equals(0L)){
+            return 0D;
+        }
+        Long minutes = (roomStatus.getEndTime()-roomStatus.getStartUp())/1000/60;
+
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String s = opsForValue.get(CURRENT_FEE_RATE_REDIS_KEY);
+
+        Double feeRate = StringUtils.isEmpty(s) ? 0.2D : Double.parseDouble(s);
+
+        return feeRate*minutes;
+    }
+
+    @Override
+    public RoomStatus getRoomStatusFromRedis(Integer id) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_SERVICE_REDIS_KEY,id);
+        String s = opsForValue.get(redisKey);
+
+        if(StringUtils.isEmpty(s)){
+            return new RoomStatus();
+        }
+        RoomStatus roomStatus = JsonUtils.fromJson(s, RoomStatus.class);
+
+        return roomStatus;
     }
 
     private Integer setData(Long roomId, Integer mode, Double currentTem, Double targetTemp, Double fanSpeed){
