@@ -17,6 +17,8 @@ public class RoomStatus {
 
     private Integer mode;
 
+    private Long endTime;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class RoomStatus {
 
     public void setMode(Integer mode) {
         this.mode = mode;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 }
