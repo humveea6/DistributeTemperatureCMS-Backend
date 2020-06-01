@@ -2,6 +2,8 @@ package com.softwareengineering.temperaturecms.service;
 
 import com.softwareengineering.temperaturecms.dto.ChangeTargetTemperatureDto;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
+import com.softwareengineering.temperaturecms.vo.InvoiceVo;
+import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -26,4 +28,8 @@ public interface RoomStatusService {
 
     //从Redis获取房间实时状况
     public RoomStatus getRoomStatusFromRedis(Integer id);
+
+    public RoomDetailListVo getRoomDetail(Integer id);
+
+    public InvoiceVo getInvoice(Integer id);
 }
