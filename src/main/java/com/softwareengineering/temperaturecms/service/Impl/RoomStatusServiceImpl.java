@@ -38,8 +38,22 @@ public class RoomStatusServiceImpl implements RoomStatusService {
 
     @Override
     public Integer ArrangeService(Long roomId, Double currentTemperature) {
+
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+
+        int mode = 1;
+        String s = opsForValue.get(DEFAULT_MODE_REDIS_KEY);
+        if(!StringUtils.isEmpty(s)){
+            mode = Integer.parseInt(s);
+        }
+
+        Double targetTemperature = 27D;
+        s= opsForValue.get(TARGET_TEMPERATURE_REDIS_KEY);
+        if(!StringUtils.isEmpty(s)){
+            targetTemperature = Double.parseDouble(s);
+        }
         //更新数据库数据
-        Integer id = setData(roomId, 1, currentTemperature, 27D, 20D);
+        Integer id = setData(roomId, mode, currentTemperature, targetTemperature, 20D);
 
         //发送对象消息
         if(id > 0) {
