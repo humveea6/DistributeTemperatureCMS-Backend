@@ -5,6 +5,8 @@ import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
 import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
 
+import java.util.List;
+
 /**
  * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-05-30
@@ -32,4 +34,8 @@ public interface RoomStatusService {
     public RoomDetailListVo getRoomDetail(Integer id);
 
     public InvoiceVo getInvoice(Integer id);
+
+    public Long countByRoomId(Long roomId);
+
+    public List<RoomStatus> getRoomStatusList(Long roomId);
 }
