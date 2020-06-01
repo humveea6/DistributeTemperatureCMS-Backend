@@ -84,11 +84,6 @@ public class UserRequestController {
     public ResponseEntity<String> getFee(Integer id){
         Double fee = roomStatusService.getFee(id);
 
-        if(fee.equals(0D)){
-            return WebResultUtil.buildResult(
-                    ResponseVo.error(ResponseEnum.GET_FEE_FAIL,"获取费用失败，空调尚未关机！"),HttpStatus.OK);
-        }
-
         Map<String,Object> res = new HashMap<>();
         res.put("id",id);
         res.put("fee",fee);
