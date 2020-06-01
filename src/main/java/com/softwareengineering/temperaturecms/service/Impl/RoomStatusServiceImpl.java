@@ -119,10 +119,16 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         invoiceVo.setRoomId(roomStatus.getRoomId());
         invoiceVo.setTotalFee(getFee(id));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         invoiceVo.setRequestTime(simpleDateFormat.format(System.currentTimeMillis()));
         invoiceVo.setDateIn(simpleDateFormat.format(new Date(roomStatus.getStartUp())));
         invoiceVo.setDateOut(simpleDateFormat.format(new Date(roomStatus.getEndTime())));
+
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String s = opsForValue.get(CURRENT_FEE_RATE_REDIS_KEY);
+
+        Double feeRate = StringUtils.isEmpty(s) ? 0.2D : Double.parseDouble(s);
+        invoiceVo.setFeeRate(feeRate);
 
         return invoiceVo;
     }

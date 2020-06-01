@@ -16,6 +16,16 @@ public class InvoiceVo {
 
     private Double totalFee;
 
+    private Double feeRate;
+
+    public Double getFeeRate() {
+        return feeRate;
+    }
+
+    public void setFeeRate(Double feeRate) {
+        this.feeRate = feeRate;
+    }
+
     public String getRequestTime() {
         return requestTime;
     }
