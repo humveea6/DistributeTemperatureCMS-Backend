@@ -3,6 +3,7 @@ package com.softwareengineering.temperaturecms.service.Impl;
 import com.softwareengineering.temperaturecms.dao.RoomStatusMapper;
 import com.softwareengineering.temperaturecms.dto.ChangeTargetTemperatureDto;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
+import com.softwareengineering.temperaturecms.pojo.RoomStatusExample;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import com.softwareengineering.temperaturecms.utils.JsonUtils;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
 
@@ -176,6 +178,22 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         RoomStatus roomStatus = JsonUtils.fromJson(s, RoomStatus.class);
 
         return roomStatus;
+    }
+
+    @Override
+    public Long countByRoomId(Long roomId) {
+        RoomStatusExample roomStatusExample = new RoomStatusExample();
+        roomStatusExample.createCriteria().andRoomIdEqualTo(roomId);
+
+        return roomStatusMapper.countByExample(roomStatusExample);
+    }
+
+    @Override
+    public List<RoomStatus> getRoomStatusList(Long roomId) {
+        RoomStatusExample roomStatusExample = new RoomStatusExample();
+        roomStatusExample.createCriteria().andRoomIdEqualTo(roomId);
+
+        return roomStatusMapper.selectByExample(roomStatusExample);
     }
 
     private Integer setData(Long roomId, Integer mode, Double currentTem, Double targetTemp, Double fanSpeed){
