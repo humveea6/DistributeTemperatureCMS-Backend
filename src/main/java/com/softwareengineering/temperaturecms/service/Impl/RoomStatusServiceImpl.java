@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
 
@@ -156,9 +157,17 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         if(roomStatus.getEndTime().equals(0L)){
             endTime = System.currentTimeMillis();
         }
-        Long minutes = (endTime-roomStatus.getStartUp())/1000/60;
 
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        Long minutes = (endTime-roomStatus.getStartUp());
+
+        String totalTime = opsForValue.get(String.format(ROOM_STOP_CHARGE_TOTAL_TIME_REDIS_KEY, id));
+        Long time = 0L;
+        if(!StringUtils.isEmpty(totalTime)) {
+            time = Long.parseLong(totalTime);
+        }
+        minutes = (minutes-time)/1000/60;
+
         String s = opsForValue.get(CURRENT_FEE_RATE_REDIS_KEY);
 
         Double feeRate = StringUtils.isEmpty(s) ? 0.2D : Double.parseDouble(s);
@@ -194,6 +203,36 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         roomStatusExample.createCriteria().andRoomIdEqualTo(roomId);
 
         return roomStatusMapper.selectByExample(roomStatusExample);
+    }
+
+    @Override
+    public void pauseFee(Integer id) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_STOP_CHARGE_TIMESTAMP_REDIS_KEY,id);
+        Long currentTimeMillis = System.currentTimeMillis();
+        opsForValue.set(redisKey,currentTimeMillis.toString());
+    }
+
+    @Override
+    public Boolean continueFee(Integer id) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_STOP_CHARGE_TIMESTAMP_REDIS_KEY,id);
+        Long currentTimeMillis = System.currentTimeMillis();
+
+        String pauseTimeStamp = opsForValue.get(redisKey);
+        if(StringUtils.isEmpty(pauseTimeStamp)){
+            return false;
+        }
+        opsForValue.set(redisKey,pauseTimeStamp,20, TimeUnit.SECONDS);
+        Long pauseTime = currentTimeMillis - Long.parseLong(pauseTimeStamp);
+        String redisKeyForTotalTime = String.format(ROOM_STOP_CHARGE_TOTAL_TIME_REDIS_KEY,id);
+        String totTime = opsForValue.get(redisKeyForTotalTime);
+        if(!StringUtils.isEmpty(totTime)){
+            pauseTime += Long.parseLong(totTime);
+        }
+        opsForValue.set(redisKeyForTotalTime,pauseTime.toString());
+
+        return true;
     }
 
     private Integer setData(Long roomId, Integer mode, Double currentTem, Double targetTemp, Double fanSpeed){

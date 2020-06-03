@@ -6,6 +6,8 @@ import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +24,14 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/room")
+@Api(tags = "客户模块")
 public class UserRequestController {
 
     @Autowired
     private RoomStatusService roomStatusService;
 
     @PostMapping("/service")
+    @ApiOperation("开机，记得保存返回的记录id")
     public ResponseEntity<String> requestOn(@RequestParam Long roomId,
                                             @RequestParam Double currentTemperature){
 
@@ -45,17 +49,20 @@ public class UserRequestController {
     }
 
     @GetMapping("/service")
+    @ApiOperation("获取房间状态")
     public ResponseEntity<String> updateStatus(Integer id){
         RoomStatus roomStatusFromRedis = roomStatusService.getRoomStatusFromRedis(id);
 
         return WebResultUtil.buildResult(ResponseVo.success(roomStatusFromRedis),HttpStatus.OK);
     }
 
-    @PostMapping("/temperature")
+    @PostMapping("/set")
+    @ApiOperation("设置房间状态")
     public ResponseEntity<String> changeTargetTemperature(@RequestParam Integer id,
-                                                          @RequestParam Double targetTemperature){
+                                                          @RequestParam Double targetTemperature,
+                                                          @RequestParam Double fanSpeed){
 
-        ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,targetTemperature);
+        ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,targetTemperature,fanSpeed);
         Boolean requestStatus = roomStatusService.RequestTemperature(changeTargetTemperatureDto);
 
 
@@ -68,6 +75,7 @@ public class UserRequestController {
     }
 
     @PutMapping("/service")
+    @ApiOperation("关机")
     public ResponseEntity<String> requestOff(@RequestParam Integer id){
 
         Boolean requestStatus = roomStatusService.WriteBack(id);
@@ -81,6 +89,7 @@ public class UserRequestController {
     }
 
     @GetMapping("/fee")
+    @ApiOperation("获取费用")
     public ResponseEntity<String> getFee(Integer id){
         Double fee = roomStatusService.getFee(id);
 
@@ -89,5 +98,25 @@ public class UserRequestController {
         res.put("fee",fee);
 
         return WebResultUtil.buildResult(ResponseVo.success(res),HttpStatus.OK);
+    }
+
+    @PostMapping("/fee")
+    @ApiOperation("暂停计费")
+    public ResponseEntity<String> pauseFee(Integer id){
+        roomStatusService.pauseFee(id);
+
+        return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
+    }
+
+    @PutMapping("/fee")
+    @ApiOperation("继续计费")
+    public ResponseEntity<String> continueFee(Integer id){
+        Boolean aBoolean = roomStatusService.continueFee(id);
+        if(aBoolean){
+            return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
+        }
+        else{
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.CONTINUE_FEE_FAIL),HttpStatus.OK);
+        }
     }
 }

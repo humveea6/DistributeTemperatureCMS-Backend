@@ -45,6 +45,7 @@ public class ChangeTargetTemperatureListener {
         log.info("ChangeTargetTemperatureListener roomstatus: "+JsonUtils.toJson(roomStatus));
 
         roomStatus.setTargetTemperature(changeTargetTemperatureDto.getTargetTemperature());
+        roomStatus.setFansSpeed(changeTargetTemperatureDto.getFanSpeed());
 
         opsForValue.set(redisKey, JsonUtils.toJson(roomStatus));
     }

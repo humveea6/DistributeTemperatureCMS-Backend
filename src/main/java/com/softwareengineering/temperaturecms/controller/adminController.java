@@ -2,6 +2,8 @@ package com.softwareengineering.temperaturecms.controller;
 
 import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -18,12 +20,14 @@ import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
 
 @RestController
 @RequestMapping("/admin")
+@Api(tags = "管理员相关")
 public class adminController {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     @PostMapping("/power")
+    @ApiOperation("空调开机")
     public ResponseEntity<String> powerOn(){
         //别问，问就是这个方法纯属傻逼多余，他存在的意义就是满足动态结构设计文档
 
@@ -31,6 +35,7 @@ public class adminController {
     }
 
     @PutMapping("/power")
+    @ApiOperation("统一参数设置")
     public ResponseEntity<String> setPara(@RequestParam Integer mode,
                                           @RequestParam Double targetTemperature,
                                           @RequestParam Double feeRate){
@@ -50,6 +55,7 @@ public class adminController {
     }
 
     @PostMapping("/startup")
+    @ApiOperation("进入工作状态")
     public ResponseEntity<String> startUp(){
         //别问，问就是这个方法纯属傻逼多余，他存在的意义就是满足动态结构设计文档
 

@@ -5,6 +5,8 @@ import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
 import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/frontdesk")
+@Api(tags = "前台相关")
 public class FrontDeskController {
 
     @Autowired
     private RoomStatusService roomStatusService;
 
     @GetMapping("/RDR")
+    @ApiOperation("RDR")
     public ResponseEntity<String> createRDR(@RequestParam Integer id){
 
         RoomDetailListVo roomDetail = roomStatusService.getRoomDetail(id);
@@ -33,6 +37,7 @@ public class FrontDeskController {
     }
 
     @GetMapping("/invoice")
+    @ApiOperation("打印收据")
     public ResponseEntity<String> createInvoice(@RequestParam Integer id){
 
         InvoiceVo invoice = roomStatusService.getInvoice(id);

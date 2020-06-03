@@ -38,4 +38,8 @@ public interface RoomStatusService {
     public Long countByRoomId(Long roomId);
 
     public List<RoomStatus> getRoomStatusList(Long roomId);
+
+    public void pauseFee(Integer id);
+
+    public Boolean continueFee(Integer id);
 }

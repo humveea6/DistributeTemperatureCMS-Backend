@@ -6,6 +6,8 @@ import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
 import com.softwareengineering.temperaturecms.vo.RoomReportVo;
 import com.softwareengineering.temperaturecms.vo.RoomStatusVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +27,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/query")
+@Api(tags = "报表相关")
 public class ReportController {
 
     @Autowired
     private RoomStatusService roomStatusService;
 
     @GetMapping("/report")
+    @ApiOperation("获取房间报表")
     public ResponseEntity<String> queryReport(@RequestParam  Long roomId){
 
         RoomReportVo roomReportVo= new RoomReportVo();

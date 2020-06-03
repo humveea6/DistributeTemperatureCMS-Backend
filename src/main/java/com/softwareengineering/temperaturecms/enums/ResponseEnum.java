@@ -30,6 +30,8 @@ public enum ResponseEnum {
 
     GET_FEE_FAIL(15,"获取费用失败"),
 
+    CONTINUE_FEE_FAIL(16,"继续计费失败（计费从未停止）"),
+
     ;
     Integer code;
 

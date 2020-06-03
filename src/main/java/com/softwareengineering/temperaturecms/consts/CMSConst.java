@@ -22,4 +22,8 @@ public class CMSConst {
     public final static String DEFAULT_MODE_REDIS_KEY = "DEFAULT_MODE";
 
     public final static String TARGET_TEMPERATURE_REDIS_KEY = "TARGET_TEMPERATURE";
+
+    public final static String ROOM_STOP_CHARGE_TIMESTAMP_REDIS_KEY = "ROOM_STOP_CHARGE_TIMESTAMP_REDIS_KEY_%d";
+
+    public final static String ROOM_STOP_CHARGE_TOTAL_TIME_REDIS_KEY = "ROOM_STOP_CHARGE_TOTAL_TIME_REDIS_KEY_%d";
 }
