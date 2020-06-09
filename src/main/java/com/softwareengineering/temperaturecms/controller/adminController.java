@@ -1,5 +1,7 @@
 package com.softwareengineering.temperaturecms.controller;
 
+import com.softwareengineering.temperaturecms.form.AdminSetingForm;
+import com.softwareengineering.temperaturecms.form.UserLoginform;
 import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
 import io.swagger.annotations.Api;
@@ -36,19 +38,32 @@ public class adminController {
 
     @PutMapping("/power")
     @ApiOperation("统一参数设置")
-    public ResponseEntity<String> setPara(@RequestParam Integer mode,
-                                          @RequestParam Double targetTemperature,
-                                          @RequestParam Double feeRate){
+    public ResponseEntity<String> setPara(@RequestBody AdminSetingForm adminSetingForm){
 
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
-        if(mode != null){
-            opsForValue.set(DEFAULT_MODE_REDIS_KEY,mode.toString());
+        if(adminSetingForm.getMode() != null){
+            opsForValue.set(DEFAULT_MODE_REDIS_KEY,adminSetingForm.getMode().toString());
         }
-        if(targetTemperature != null){
-            opsForValue.set(TARGET_TEMPERATURE_REDIS_KEY,targetTemperature.toString());
+        if(adminSetingForm.getTargetTemperature() != null){
+            opsForValue.set(TARGET_TEMPERATURE_REDIS_KEY,adminSetingForm.getTargetTemperature().toString());
         }
-        if(feeRate != null){
-            opsForValue.set(CURRENT_FEE_RATE_REDIS_KEY,feeRate.toString());
+        if(adminSetingForm.getFeeRateLow() != null){
+            opsForValue.set(LOW_FEE_RATE_REDIS_KEY,adminSetingForm.getFeeRateLow().toString());
+        }
+        if(adminSetingForm.getFeeRateMid() != null){
+            opsForValue.set(MIDDLE_FEE_RATE_REDIS_KEY,adminSetingForm.getFeeRateMid().toString());
+        }
+        if(adminSetingForm.getFeeRateHigh() != null){
+            opsForValue.set(HIGH_FEE_RATE_REDIS_KEY,adminSetingForm.getFeeRateHigh().toString());
+        }
+        if(adminSetingForm.getFanSpeed() != null){
+            opsForValue.set(DEFAULT_FANS_SPEED_REDIS_KEY,adminSetingForm.getFanSpeed().toString());
+        }
+        if(adminSetingForm.getLowestTemperature() != null){
+            opsForValue.set(LOWEST_TEMPERATURE_REDIS_KEY,adminSetingForm.getLowestTemperature().toString());
+        }
+        if(adminSetingForm.getHighestTemperature() != null){
+            opsForValue.set(HIGHEST_TEMPERATURE_REDIS_KEY,adminSetingForm.getHighestTemperature().toString());
         }
 
         return WebResultUtil.buildResult(ResponseVo.success("设置成功"), HttpStatus.OK);

@@ -5,6 +5,7 @@ import com.softwareengineering.temperaturecms.enums.ResponseEnum;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import com.softwareengineering.temperaturecms.utils.WebResultUtil;
+import com.softwareengineering.temperaturecms.vo.DefaultSettingVo;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,18 +31,16 @@ public class UserRequestController {
     @Autowired
     private RoomStatusService roomStatusService;
 
-    @PostMapping("/service")
+    @PostMapping("/initial")
     @ApiOperation("开机，记得保存返回的记录id")
     public ResponseEntity<String> requestOn(@RequestParam Long roomId,
                                             @RequestParam Double currentTemperature){
 
-        Integer requestStatus = roomStatusService.ArrangeService(roomId, currentTemperature);
+        DefaultSettingVo defaultSettingVo = roomStatusService.ArrangeService(roomId, currentTemperature);
 
 
-        if(requestStatus > 0){
-            Map<String,Integer> res = new HashMap<>();
-            res.put("id",requestStatus);
-            return WebResultUtil.buildResult(ResponseVo.success(res), HttpStatus.OK);
+        if(defaultSettingVo != null){
+            return WebResultUtil.buildResult(ResponseVo.success(defaultSettingVo), HttpStatus.OK);
         }
         else{
             return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.AC_ON_FAIL),HttpStatus.OK);

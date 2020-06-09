@@ -2,6 +2,7 @@ package com.softwareengineering.temperaturecms.service;
 
 import com.softwareengineering.temperaturecms.dto.ChangeTargetTemperatureDto;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
+import com.softwareengineering.temperaturecms.vo.DefaultSettingVo;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
 import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface RoomStatusService {
 
     //开机
-    public Integer ArrangeService(Long roomId,Double currentTemperature);
+    public DefaultSettingVo ArrangeService(Long roomId, Double currentTemperature);
 
     //更改目标温度
     public Boolean RequestTemperature(ChangeTargetTemperatureDto changeTargetTemperatureDto);

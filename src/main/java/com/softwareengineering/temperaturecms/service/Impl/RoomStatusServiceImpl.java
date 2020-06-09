@@ -6,6 +6,7 @@ import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.pojo.RoomStatusExample;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import com.softwareengineering.temperaturecms.utils.JsonUtils;
+import com.softwareengineering.temperaturecms.vo.DefaultSettingVo;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
 import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +40,9 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     private StringRedisTemplate redisTemplate;
 
     @Override
-    public Integer ArrangeService(Long roomId, Double currentTemperature) {
+    public DefaultSettingVo ArrangeService(Long roomId, Double currentTemperature) {
+
+        DefaultSettingVo defaultSettingVo = new DefaultSettingVo();
 
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
 
@@ -55,16 +57,39 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         if(!StringUtils.isEmpty(s)){
             targetTemperature = Double.parseDouble(s);
         }
+        defaultSettingVo.setDefaultTargetTemperature(targetTemperature);
+
+        Double highestTemperature = 35D;
+        s= opsForValue.get(HIGHEST_TEMPERATURE_REDIS_KEY);
+        if(!StringUtils.isEmpty(s)){
+            highestTemperature = Double.parseDouble(s);
+        }
+        defaultSettingVo.setHighestTemperature(highestTemperature);
+
+        Double lowestTemperature = 27D;
+        s= opsForValue.get(LOWEST_TEMPERATURE_REDIS_KEY);
+        if(!StringUtils.isEmpty(s)){
+            lowestTemperature = Double.parseDouble(s);
+        }
+        defaultSettingVo.setLowestTemperature(lowestTemperature);
+
+        Double fanSpeed = 27D;
+        s= opsForValue.get(DEFAULT_FANS_SPEED_REDIS_KEY);
+        if(!StringUtils.isEmpty(s)){
+            fanSpeed = Double.parseDouble(s);
+        }
+        defaultSettingVo.setDefaultFanSpeed(fanSpeed);
+
         //更新数据库数据
         Integer id = setData(roomId, mode, currentTemperature, targetTemperature, 20D);
 
         //发送对象消息
         if(id > 0) {
             rabbitTemplate.convertAndSend(AC_ON_QUEUE, id);
-            return id;
+            return defaultSettingVo;
         }
         else{
-            return -1;
+            return null;
         }
     }
 
@@ -117,7 +142,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         }
 
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
-        String s = opsForValue.get(CURRENT_FEE_RATE_REDIS_KEY);
+        String s = opsForValue.get(LOW_FEE_RATE_REDIS_KEY);
 
         Double feeRate = StringUtils.isEmpty(s) ? 0.2D : Double.parseDouble(s);
 
@@ -142,7 +167,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         invoiceVo.setDateOut(simpleDateFormat.format(new Date(roomStatus.getEndTime())));
 
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
-        String s = opsForValue.get(CURRENT_FEE_RATE_REDIS_KEY);
+        String s = opsForValue.get(LOW_FEE_RATE_REDIS_KEY);
 
         Double feeRate = StringUtils.isEmpty(s) ? 0.2D : Double.parseDouble(s);
         invoiceVo.setFeeRate(feeRate);
@@ -168,7 +193,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         }
         minutes = (minutes-time)/1000/60;
 
-        String s = opsForValue.get(CURRENT_FEE_RATE_REDIS_KEY);
+        String s = opsForValue.get(LOW_FEE_RATE_REDIS_KEY);
 
         Double feeRate = StringUtils.isEmpty(s) ? 0.2D : Double.parseDouble(s);
 
