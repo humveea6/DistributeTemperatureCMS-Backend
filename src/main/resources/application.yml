@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: HFg20170040+
+    username:
+    password:
     url: jdbc:mysql://127.0.0.1:3306/TemperatureCMS?characterEncoding=utf-8&useSSL=false
   redis:
     host: 127.0.0.1
@@ -11,8 +11,8 @@ spring:
   rabbitmq:
     addresses: 127.0.0.1
     port: 5672
-    username: guest
-    password: guest
+    username:
+    password: 
 
 mybatis:
   configuration:

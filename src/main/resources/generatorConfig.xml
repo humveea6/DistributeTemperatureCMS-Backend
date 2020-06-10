@@ -14,8 +14,8 @@
 
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/TemperatureCMS?characterEncoding=utf-8"
-                        userId="root"
-                        password="g20170040">
+                        userId=""
+                        password="">
         </jdbcConnection>
 
         <javaTypeResolver >
