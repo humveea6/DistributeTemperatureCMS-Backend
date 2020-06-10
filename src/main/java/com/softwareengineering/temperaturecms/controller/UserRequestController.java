@@ -47,6 +47,19 @@ public class UserRequestController {
         }
     }
 
+    @ApiOperation("房间开机")
+    @PostMapping("/service")
+    public ResponseEntity<String> startService(@RequestParam Integer id,
+                                               @RequestParam Double target,
+                                               @RequestParam Double fanSpeed){
+        //todo:调度
+        //public Boolean changeRoomServingState(Integer id, StateEnum stateEnum);
+        //public StateEnum getRoomServingState(Integer id);
+        //用于设置空调工作状态and获取状态
+
+        return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
+    }
+
     @GetMapping("/service")
     @ApiOperation("获取房间状态")
     public ResponseEntity<String> updateStatus(Integer id){
@@ -55,21 +68,35 @@ public class UserRequestController {
         return WebResultUtil.buildResult(ResponseVo.success(roomStatusFromRedis),HttpStatus.OK);
     }
 
-    @PostMapping("/set")
-    @ApiOperation("设置房间状态")
+    @PostMapping("/temp")
+    @ApiOperation("设置房间温度")
     public ResponseEntity<String> changeTargetTemperature(@RequestParam Integer id,
-                                                          @RequestParam Double targetTemperature,
-                                                          @RequestParam Double fanSpeed){
+                                                          @RequestParam Double targetTemperature){
 
-        ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,targetTemperature,fanSpeed);
+        ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,targetTemperature);
         Boolean requestStatus = roomStatusService.RequestTemperature(changeTargetTemperatureDto);
-
 
         if(requestStatus){
             return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
         }
         else{
             return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.CHANGE_TARGET_TEMPERATURE_FAIL),HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/fan")
+    @ApiOperation("设置房间风速")
+    public ResponseEntity<String> changeFanSpeed(@RequestParam Integer id,
+                                                 @RequestParam Double fanSpeed){
+
+        ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,fanSpeed);
+        Boolean requestStatus = roomStatusService.RequestFanSpeed(changeTargetTemperatureDto);
+
+        if(requestStatus){
+            return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
+        }
+        else{
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.CHANGE_FANS_SPEED_FAIL),HttpStatus.OK);
         }
     }
 

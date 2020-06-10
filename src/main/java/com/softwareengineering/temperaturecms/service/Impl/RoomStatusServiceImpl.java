@@ -2,6 +2,7 @@ package com.softwareengineering.temperaturecms.service.Impl;
 
 import com.softwareengineering.temperaturecms.dao.RoomStatusMapper;
 import com.softwareengineering.temperaturecms.dto.ChangeTargetTemperatureDto;
+import com.softwareengineering.temperaturecms.enums.StateEnum;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.pojo.RoomStatusExample;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
@@ -116,6 +117,63 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         rabbitTemplate.convertAndSend(CHANGE_TARGET_TEMPERATURE_QUEUE, JsonUtils.toJson(changeTargetTemperatureDto));
 
         return true;
+    }
+
+    @Override
+    public Boolean RequestFanSpeed(ChangeTargetTemperatureDto changeTargetTemperatureDto) {
+
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_SERVICE_REDIS_KEY,changeTargetTemperatureDto.getId());
+        String s = opsForValue.get(redisKey);
+
+        if(StringUtils.isEmpty(s)){
+            return false;
+        }
+        RoomStatus roomStatus = JsonUtils.fromJson(s, RoomStatus.class);
+        roomStatus.setFansSpeed(changeTargetTemperatureDto.getFanSpeed());
+        opsForValue.set(redisKey,JsonUtils.toJson(roomStatus));
+        return true;
+    }
+
+    @Override
+    public Boolean changeRoomServingState(Integer id, StateEnum stateEnum) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_SERVICE_REDIS_KEY,id);
+        String s = opsForValue.get(redisKey);
+
+        if(StringUtils.isEmpty(s)){
+            return false;
+        }
+        RoomStatus roomStatus = JsonUtils.fromJson(s, RoomStatus.class);
+        roomStatus.setState(stateEnum.getState());
+        opsForValue.set(redisKey,JsonUtils.toJson(roomStatus));
+        return true;
+    }
+
+    @Override
+    public StateEnum getRoomServingState(Integer id) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_SERVICE_REDIS_KEY,id);
+        String s = opsForValue.get(redisKey);
+
+        if(StringUtils.isEmpty(s)){
+            return StateEnum.NO_SUCH_ROOM;
+        }
+        RoomStatus roomStatus = JsonUtils.fromJson(s, RoomStatus.class);
+
+        if(roomStatus.getState()!=null){
+            if(roomStatus.getState().equals(0)){
+                return StateEnum.IN_SERVICE;
+            }
+            if(roomStatus.getState().equals(1)){
+                return StateEnum.WAITING;
+            }
+            if(roomStatus.getState().equals(2)){
+                return StateEnum.FREE;
+            }
+        }
+
+        return StateEnum.NO_SUCH_ROOM;
     }
 
     @Override

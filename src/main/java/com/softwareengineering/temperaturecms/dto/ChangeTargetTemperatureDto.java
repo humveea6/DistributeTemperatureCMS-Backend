@@ -20,6 +20,12 @@ public class ChangeTargetTemperatureDto {
         this.fanSpeed = fanSpeed;
     }
 
+    public ChangeTargetTemperatureDto(Integer id, Double targetTemperature) {
+        this.id = id;
+        this.targetTemperature = targetTemperature;
+    }
+
+
     public ChangeTargetTemperatureDto(Integer id, Double targetTemperature, Double fanSpeed) {
         this.id = id;
         this.targetTemperature = targetTemperature;

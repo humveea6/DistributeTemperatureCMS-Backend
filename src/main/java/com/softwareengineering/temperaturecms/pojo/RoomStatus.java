@@ -19,6 +19,8 @@ public class RoomStatus {
 
     private Long endTime;
 
+    private Integer state;
+
     public Integer getId() {
         return id;
     }
@@ -89,5 +91,13 @@ public class RoomStatus {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }
