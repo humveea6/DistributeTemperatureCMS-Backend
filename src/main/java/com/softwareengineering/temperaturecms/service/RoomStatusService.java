@@ -1,7 +1,9 @@
 package com.softwareengineering.temperaturecms.service;
 
 import com.softwareengineering.temperaturecms.dto.ChangeTargetTemperatureDto;
+import com.softwareengineering.temperaturecms.enums.StateEnum;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
+import com.softwareengineering.temperaturecms.vo.DefaultSettingVo;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
 import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
 
@@ -14,10 +16,12 @@ import java.util.List;
 public interface RoomStatusService {
 
     //开机
-    public Integer ArrangeService(Long roomId,Double currentTemperature);
+    public DefaultSettingVo ArrangeService(Long roomId, Double currentTemperature);
 
     //更改目标温度
     public Boolean RequestTemperature(ChangeTargetTemperatureDto changeTargetTemperatureDto);
+
+    public Boolean RequestFanSpeed(ChangeTargetTemperatureDto changeTargetTemperatureDto);
 
     //获取单条记录
     public RoomStatus getRoomStatusById(Integer id);
@@ -38,4 +42,14 @@ public interface RoomStatusService {
     public Long countByRoomId(Long roomId);
 
     public List<RoomStatus> getRoomStatusList(Long roomId);
+
+    public void pauseFee(Integer id);
+
+    public Boolean continueFee(Integer id);
+
+    //修改房间空调工作状态
+    public Boolean changeRoomServingState(Integer id, StateEnum stateEnum);
+
+    //获取空调工作状态
+    public StateEnum getRoomServingState(Integer id);
 }

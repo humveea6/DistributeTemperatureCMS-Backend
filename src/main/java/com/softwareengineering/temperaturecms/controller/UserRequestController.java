@@ -5,7 +5,10 @@ import com.softwareengineering.temperaturecms.enums.ResponseEnum;
 import com.softwareengineering.temperaturecms.pojo.RoomStatus;
 import com.softwareengineering.temperaturecms.service.RoomStatusService;
 import com.softwareengineering.temperaturecms.utils.WebResultUtil;
+import com.softwareengineering.temperaturecms.vo.DefaultSettingVo;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,42 +25,56 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/room")
+@Api(tags = "客户模块")
 public class UserRequestController {
 
     @Autowired
     private RoomStatusService roomStatusService;
 
-    @PostMapping("/service")
+    @PostMapping("/initial")
+    @ApiOperation("开机，记得保存返回的记录id")
     public ResponseEntity<String> requestOn(@RequestParam Long roomId,
                                             @RequestParam Double currentTemperature){
 
-        Integer requestStatus = roomStatusService.ArrangeService(roomId, currentTemperature);
+        DefaultSettingVo defaultSettingVo = roomStatusService.ArrangeService(roomId, currentTemperature);
 
 
-        if(requestStatus > 0){
-            Map<String,Integer> res = new HashMap<>();
-            res.put("id",requestStatus);
-            return WebResultUtil.buildResult(ResponseVo.success(res), HttpStatus.OK);
+        if(defaultSettingVo != null){
+            return WebResultUtil.buildResult(ResponseVo.success(defaultSettingVo), HttpStatus.OK);
         }
         else{
             return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.AC_ON_FAIL),HttpStatus.OK);
         }
     }
 
+    @ApiOperation("房间开机")
+    @PostMapping("/service")
+    public ResponseEntity<String> startService(@RequestParam Integer id,
+                                               @RequestParam Double target,
+                                               @RequestParam Double fanSpeed){
+        //todo:调度
+        //public Boolean changeRoomServingState(Integer id, StateEnum stateEnum);
+        //public StateEnum getRoomServingState(Integer id);
+        //用于设置空调工作状态and获取状态
+
+        return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
+    }
+
     @GetMapping("/service")
+    @ApiOperation("获取房间状态")
     public ResponseEntity<String> updateStatus(Integer id){
         RoomStatus roomStatusFromRedis = roomStatusService.getRoomStatusFromRedis(id);
 
         return WebResultUtil.buildResult(ResponseVo.success(roomStatusFromRedis),HttpStatus.OK);
     }
 
-    @PostMapping("/temperature")
+    @PostMapping("/temp")
+    @ApiOperation("设置房间温度")
     public ResponseEntity<String> changeTargetTemperature(@RequestParam Integer id,
                                                           @RequestParam Double targetTemperature){
 
         ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,targetTemperature);
         Boolean requestStatus = roomStatusService.RequestTemperature(changeTargetTemperatureDto);
-
 
         if(requestStatus){
             return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
@@ -67,7 +84,24 @@ public class UserRequestController {
         }
     }
 
+    @PostMapping("/fan")
+    @ApiOperation("设置房间风速")
+    public ResponseEntity<String> changeFanSpeed(@RequestParam Integer id,
+                                                 @RequestParam Double fanSpeed){
+
+        ChangeTargetTemperatureDto changeTargetTemperatureDto = new ChangeTargetTemperatureDto(id,fanSpeed);
+        Boolean requestStatus = roomStatusService.RequestFanSpeed(changeTargetTemperatureDto);
+
+        if(requestStatus){
+            return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
+        }
+        else{
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.CHANGE_FANS_SPEED_FAIL),HttpStatus.OK);
+        }
+    }
+
     @PutMapping("/service")
+    @ApiOperation("关机")
     public ResponseEntity<String> requestOff(@RequestParam Integer id){
 
         Boolean requestStatus = roomStatusService.WriteBack(id);
@@ -81,6 +115,7 @@ public class UserRequestController {
     }
 
     @GetMapping("/fee")
+    @ApiOperation("获取费用")
     public ResponseEntity<String> getFee(Integer id){
         Double fee = roomStatusService.getFee(id);
 
@@ -89,5 +124,25 @@ public class UserRequestController {
         res.put("fee",fee);
 
         return WebResultUtil.buildResult(ResponseVo.success(res),HttpStatus.OK);
+    }
+
+    @PostMapping("/fee")
+    @ApiOperation("暂停计费")
+    public ResponseEntity<String> pauseFee(Integer id){
+        roomStatusService.pauseFee(id);
+
+        return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
+    }
+
+    @PutMapping("/fee")
+    @ApiOperation("继续计费")
+    public ResponseEntity<String> continueFee(Integer id){
+        Boolean aBoolean = roomStatusService.continueFee(id);
+        if(aBoolean){
+            return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
+        }
+        else{
+            return WebResultUtil.buildResult(ResponseVo.error(ResponseEnum.CONTINUE_FEE_FAIL),HttpStatus.OK);
+        }
     }
 }

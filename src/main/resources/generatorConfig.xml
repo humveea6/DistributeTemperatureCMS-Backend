@@ -14,8 +14,8 @@
 
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/TemperatureCMS?characterEncoding=utf-8"
-                        userId="root"
-                        password="g20170040">
+                        userId=""
+                        password="">
         </jdbcConnection>
 
         <javaTypeResolver >
@@ -44,7 +44,7 @@
 <!--        </table>-->
 <!--        <table tableName="mall_order" domainObjectName="Order"/>-->
 <!--        <table tableName="mall_order_item" domainObjectName="Orderitem"/>-->
-        <table tableName="room_status" domainObjectName="RoomStatus">
+        <table tableName="room_serving_list" domainObjectName="RoomServingList">
 <!--            <columnOverride column="detail" jdbcType="VARCHAR" />-->
 <!--            <columnOverride column="sub_images" jdbcType="VARCHAR" />-->
         </table>

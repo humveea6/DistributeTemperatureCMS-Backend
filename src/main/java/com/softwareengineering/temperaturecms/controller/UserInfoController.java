@@ -8,6 +8,8 @@ import com.softwareengineering.temperaturecms.pojo.User;
 import com.softwareengineering.temperaturecms.service.UserInfoService;
 import com.softwareengineering.temperaturecms.utils.WebResultUtil;
 import com.softwareengineering.temperaturecms.vo.ResponseVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +28,14 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @Slf4j
+@Api(tags = "登录注册相关")
 public class UserInfoController {
 
     @Autowired
     private UserInfoService userInfoService;
     
     @PostMapping("/register")
+    @ApiOperation("注册")
     public ResponseEntity<String> register(@Valid @RequestBody UserRegisterform userRegisterform,
                                    BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -52,6 +56,7 @@ public class UserInfoController {
         return userInfoService.register(user);
     }
 
+    @ApiOperation("登录")
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginform userLoginform,
                                   BindingResult bindingResult, HttpSession httpSession){
@@ -67,6 +72,7 @@ public class UserInfoController {
         return WebResultUtil.buildResult(userResponseVo,HttpStatus.OK);
     }
 
+    @ApiOperation("获取用户信息")
     @GetMapping("/info")
     public ResponseVo<User> userInfo(HttpSession httpSession){
         User user = (User)httpSession.getAttribute(CMSConst.CURRENT_USER);
@@ -74,6 +80,7 @@ public class UserInfoController {
         return ResponseVo.success(user);
     }
 
+    @ApiOperation("登出")
     @PostMapping("/logout")
     public ResponseVo logout(HttpSession httpSession){
         httpSession.removeAttribute(CMSConst.CURRENT_USER);

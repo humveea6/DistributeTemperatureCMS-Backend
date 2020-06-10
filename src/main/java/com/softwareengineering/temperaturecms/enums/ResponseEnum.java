@@ -26,9 +26,13 @@ public enum ResponseEnum {
 
     CHANGE_TARGET_TEMPERATURE_FAIL(13,"修改温度失败"),
 
+    CHANGE_FANS_SPEED_FAIL(17,"修改风速失败"),
+
     AC_OFF_FAIL(14,"中央空调关机失败"),
 
     GET_FEE_FAIL(15,"获取费用失败"),
+
+    CONTINUE_FEE_FAIL(16,"继续计费失败（计费从未停止）"),
 
     ;
     Integer code;
