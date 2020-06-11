@@ -43,13 +43,15 @@ public interface RoomStatusService {
 
     public List<RoomStatus> getRoomStatusList(Long roomId);
 
-    public void pauseFee(Integer id);
+    public void pauseService(Integer id);
 
-    public Boolean continueFee(Integer id);
+    public Boolean continueService(Integer id);
 
     //修改房间空调工作状态
     public Boolean changeRoomServingState(Integer id, StateEnum stateEnum);
 
     //获取空调工作状态
     public StateEnum getRoomServingState(Integer id);
+
+    public Double getRoomServiceTime(Integer id);
 }

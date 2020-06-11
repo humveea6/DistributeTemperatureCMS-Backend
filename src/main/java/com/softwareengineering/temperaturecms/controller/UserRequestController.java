@@ -129,7 +129,7 @@ public class UserRequestController {
     @PostMapping("/fee")
     @ApiOperation("暂停计费")
     public ResponseEntity<String> pauseFee(Integer id){
-        roomStatusService.pauseFee(id);
+        roomStatusService.pauseService(id);
 
         return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
     }
@@ -137,7 +137,7 @@ public class UserRequestController {
     @PutMapping("/fee")
     @ApiOperation("继续计费")
     public ResponseEntity<String> continueFee(Integer id){
-        Boolean aBoolean = roomStatusService.continueFee(id);
+        Boolean aBoolean = roomStatusService.continueService(id);
         if(aBoolean){
             return WebResultUtil.buildResult(ResponseVo.successByMsg(),HttpStatus.OK);
         }

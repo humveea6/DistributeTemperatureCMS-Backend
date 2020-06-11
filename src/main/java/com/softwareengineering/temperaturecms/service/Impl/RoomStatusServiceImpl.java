@@ -296,7 +296,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     }
 
     @Override
-    public void pauseFee(Integer id) {
+    public void pauseService(Integer id) {
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         String redisKey = String.format(ROOM_STOP_CHARGE_TIMESTAMP_REDIS_KEY,id);
         Long currentTimeMillis = System.currentTimeMillis();
@@ -304,7 +304,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     }
 
     @Override
-    public Boolean continueFee(Integer id) {
+    public Boolean continueService(Integer id) {
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         String redisKey = String.format(ROOM_STOP_CHARGE_TIMESTAMP_REDIS_KEY,id);
         Long currentTimeMillis = System.currentTimeMillis();
@@ -323,6 +323,16 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         opsForValue.set(redisKeyForTotalTime,pauseTime.toString());
 
         return true;
+    }
+
+    @Override
+    public Double getRoomServiceTime(Integer id) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+
+        String redisKeyForTotalTime = String.format(ROOM_STOP_CHARGE_TOTAL_TIME_REDIS_KEY,id);
+        String totTime = opsForValue.get(redisKeyForTotalTime);
+        long timeInLong = Long.parseLong(totTime);
+        return (double)timeInLong/1000/60;
     }
 
     private Integer setData(Long roomId, Integer mode, Double currentTem, Double targetTemp, Double fanSpeed){
