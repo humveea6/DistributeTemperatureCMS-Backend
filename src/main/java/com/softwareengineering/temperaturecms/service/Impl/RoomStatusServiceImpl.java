@@ -85,6 +85,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
 
         //更新数据库数据
         Integer id = setData(roomId, mode, currentTemperature, targetTemperature, 20D);
+        defaultSettingVo.setId(id);
 
         log.info("RoomStatusServiceImpl update sql success,id: "+id);
 
