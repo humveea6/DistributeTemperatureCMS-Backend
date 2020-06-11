@@ -10,6 +10,7 @@ import com.softwareengineering.temperaturecms.utils.JsonUtils;
 import com.softwareengineering.temperaturecms.vo.DefaultSettingVo;
 import com.softwareengineering.temperaturecms.vo.InvoiceVo;
 import com.softwareengineering.temperaturecms.vo.RoomDetailListVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -29,6 +30,7 @@ import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
  * Created on 2020-05-30
  */
 @Service
+@Slf4j
 public class RoomStatusServiceImpl implements RoomStatusService {
 
     @Autowired
@@ -84,9 +86,13 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         //更新数据库数据
         Integer id = setData(roomId, mode, currentTemperature, targetTemperature, 20D);
 
+        log.info("RoomStatusServiceImpl update sql success,id: "+id);
+
         //发送对象消息
         if(id > 0) {
             rabbitTemplate.convertAndSend(AC_ON_QUEUE, id);
+            log.info("RoomStatusServiceImpl send msg success");
+            log.info("RoomStatusServiceImpl default setting :"+JsonUtils.toJson(defaultSettingVo));
             return defaultSettingVo;
         }
         else{

@@ -105,7 +105,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
+  <insert id="insert" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus" useGeneratedKeys="true" keyProperty="id">
     insert into room_status (id, room_id, current_temperature, 
       target_temperature, fans_speed, fare_rate, 
       start_up, mode, end_time, 
@@ -115,7 +115,7 @@
       #{startUp,jdbcType=BIGINT}, #{mode,jdbcType=INTEGER}, #{endTime,jdbcType=BIGINT}, 
       #{state,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus">
+  <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus" useGeneratedKeys="true" keyProperty="id">
     insert into room_status
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
