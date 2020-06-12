@@ -31,6 +31,10 @@ public class RoomStatus {
 
     private Integer changeSpeedTime;
 
+    private Double fee;
+
+    private Long duration;
+
     public Integer getId() {
         return id;
     }
@@ -149,5 +153,21 @@ public class RoomStatus {
 
     public void setChangeSpeedTime(Integer changeSpeedTime) {
         this.changeSpeedTime = changeSpeedTime;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
     }
 }

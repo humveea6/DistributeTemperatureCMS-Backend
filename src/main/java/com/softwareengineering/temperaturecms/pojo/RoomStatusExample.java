@@ -1003,6 +1003,126 @@ public class RoomStatusExample {
             addCriterion("change_speed_time not between", value1, value2, "changeSpeedTime");
             return (Criteria) this;
         }
+
+        public Criteria andFeeIsNull() {
+            addCriterion("fee is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeIsNotNull() {
+            addCriterion("fee is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeEqualTo(Double value) {
+            addCriterion("fee =", value, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeNotEqualTo(Double value) {
+            addCriterion("fee <>", value, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeGreaterThan(Double value) {
+            addCriterion("fee >", value, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeGreaterThanOrEqualTo(Double value) {
+            addCriterion("fee >=", value, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeLessThan(Double value) {
+            addCriterion("fee <", value, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeLessThanOrEqualTo(Double value) {
+            addCriterion("fee <=", value, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeIn(List<Double> values) {
+            addCriterion("fee in", values, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeNotIn(List<Double> values) {
+            addCriterion("fee not in", values, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeBetween(Double value1, Double value2) {
+            addCriterion("fee between", value1, value2, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeeNotBetween(Double value1, Double value2) {
+            addCriterion("fee not between", value1, value2, "fee");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationIsNull() {
+            addCriterion("duration is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationIsNotNull() {
+            addCriterion("duration is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationEqualTo(Long value) {
+            addCriterion("duration =", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationNotEqualTo(Long value) {
+            addCriterion("duration <>", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationGreaterThan(Long value) {
+            addCriterion("duration >", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationGreaterThanOrEqualTo(Long value) {
+            addCriterion("duration >=", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationLessThan(Long value) {
+            addCriterion("duration <", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationLessThanOrEqualTo(Long value) {
+            addCriterion("duration <=", value, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationIn(List<Long> values) {
+            addCriterion("duration in", values, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationNotIn(List<Long> values) {
+            addCriterion("duration not in", values, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationBetween(Long value1, Long value2) {
+            addCriterion("duration between", value1, value2, "duration");
+            return (Criteria) this;
+        }
+
+        public Criteria andDurationNotBetween(Long value1, Long value2) {
+            addCriterion("duration not between", value1, value2, "duration");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
