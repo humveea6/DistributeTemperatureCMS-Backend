@@ -35,6 +35,8 @@ public class RoomStatus {
 
     private Long duration;
 
+    private Double currentFansSpeed;
+
     public Integer getId() {
         return id;
     }
@@ -169,5 +171,13 @@ public class RoomStatus {
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public Double getCurrentFansSpeed() {
+        return currentFansSpeed;
+    }
+
+    public void setCurrentFansSpeed(Double currentFansSpeed) {
+        this.currentFansSpeed = currentFansSpeed;
     }
 }

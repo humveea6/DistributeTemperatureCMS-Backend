@@ -1123,6 +1123,66 @@ public class RoomStatusExample {
             addCriterion("duration not between", value1, value2, "duration");
             return (Criteria) this;
         }
+
+        public Criteria andCurrentFansSpeedIsNull() {
+            addCriterion("current_fans_speed is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedIsNotNull() {
+            addCriterion("current_fans_speed is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedEqualTo(Double value) {
+            addCriterion("current_fans_speed =", value, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedNotEqualTo(Double value) {
+            addCriterion("current_fans_speed <>", value, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedGreaterThan(Double value) {
+            addCriterion("current_fans_speed >", value, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedGreaterThanOrEqualTo(Double value) {
+            addCriterion("current_fans_speed >=", value, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedLessThan(Double value) {
+            addCriterion("current_fans_speed <", value, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedLessThanOrEqualTo(Double value) {
+            addCriterion("current_fans_speed <=", value, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedIn(List<Double> values) {
+            addCriterion("current_fans_speed in", values, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedNotIn(List<Double> values) {
+            addCriterion("current_fans_speed not in", values, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedBetween(Double value1, Double value2) {
+            addCriterion("current_fans_speed between", value1, value2, "currentFansSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentFansSpeedNotBetween(Double value1, Double value2) {
+            addCriterion("current_fans_speed not between", value1, value2, "currentFansSpeed");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

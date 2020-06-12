@@ -19,6 +19,7 @@
     <result column="change_speed_time" jdbcType="INTEGER" property="changeSpeedTime" />
     <result column="fee" jdbcType="DOUBLE" property="fee" />
     <result column="duration" jdbcType="BIGINT" property="duration" />
+    <result column="current_fans_speed" jdbcType="DOUBLE" property="currentFansSpeed" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -81,7 +82,7 @@
   <sql id="Base_Column_List">
     id, room_id, current_temperature, target_temperature, fans_speed, fare_rate, start_up, 
     mode, end_time, state, on_off_time, dispatch_times, rdr_num, change_temp_time, change_speed_time, 
-    fee, duration
+    fee, duration, current_fans_speed
   </sql>
   <select id="selectByExample" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatusExample" resultMap="BaseResultMap">
     select
@@ -119,13 +120,15 @@
       start_up, mode, end_time, 
       state, on_off_time, dispatch_times, 
       rdr_num, change_temp_time, change_speed_time, 
-      fee, duration)
+      fee, duration, current_fans_speed
+      )
     values (#{id,jdbcType=INTEGER}, #{roomId,jdbcType=BIGINT}, #{currentTemperature,jdbcType=DOUBLE}, 
       #{targetTemperature,jdbcType=DOUBLE}, #{fansSpeed,jdbcType=DOUBLE}, #{fareRate,jdbcType=DOUBLE}, 
       #{startUp,jdbcType=BIGINT}, #{mode,jdbcType=INTEGER}, #{endTime,jdbcType=BIGINT}, 
       #{state,jdbcType=INTEGER}, #{onOffTime,jdbcType=INTEGER}, #{dispatchTimes,jdbcType=INTEGER}, 
       #{rdrNum,jdbcType=INTEGER}, #{changeTempTime,jdbcType=INTEGER}, #{changeSpeedTime,jdbcType=INTEGER}, 
-      #{fee,jdbcType=DOUBLE}, #{duration,jdbcType=BIGINT})
+      #{fee,jdbcType=DOUBLE}, #{duration,jdbcType=BIGINT}, #{currentFansSpeed,jdbcType=DOUBLE}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus" useGeneratedKeys="true" keyProperty="id">
     insert into room_status
@@ -181,6 +184,9 @@
       <if test="duration != null">
         duration,
       </if>
+      <if test="currentFansSpeed != null">
+        current_fans_speed,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -233,6 +239,9 @@
       </if>
       <if test="duration != null">
         #{duration,jdbcType=BIGINT},
+      </if>
+      <if test="currentFansSpeed != null">
+        #{currentFansSpeed,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -296,6 +305,9 @@
       <if test="record.duration != null">
         duration = #{record.duration,jdbcType=BIGINT},
       </if>
+      <if test="record.currentFansSpeed != null">
+        current_fans_speed = #{record.currentFansSpeed,jdbcType=DOUBLE},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -319,7 +331,8 @@
       change_temp_time = #{record.changeTempTime,jdbcType=INTEGER},
       change_speed_time = #{record.changeSpeedTime,jdbcType=INTEGER},
       fee = #{record.fee,jdbcType=DOUBLE},
-      duration = #{record.duration,jdbcType=BIGINT}
+      duration = #{record.duration,jdbcType=BIGINT},
+      current_fans_speed = #{record.currentFansSpeed,jdbcType=DOUBLE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -375,6 +388,9 @@
       <if test="duration != null">
         duration = #{duration,jdbcType=BIGINT},
       </if>
+      <if test="currentFansSpeed != null">
+        current_fans_speed = #{currentFansSpeed,jdbcType=DOUBLE},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -395,7 +411,8 @@
       change_temp_time = #{changeTempTime,jdbcType=INTEGER},
       change_speed_time = #{changeSpeedTime,jdbcType=INTEGER},
       fee = #{fee,jdbcType=DOUBLE},
-      duration = #{duration,jdbcType=BIGINT}
+      duration = #{duration,jdbcType=BIGINT},
+      current_fans_speed = #{currentFansSpeed,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
