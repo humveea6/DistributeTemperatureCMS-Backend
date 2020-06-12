@@ -21,6 +21,16 @@ public class RoomStatus {
 
     private Integer state;
 
+    private Integer onOffTime;
+
+    private Integer dispatchTimes;
+
+    private Integer rdrNum;
+
+    private Integer changeTempTime;
+
+    private Integer changeSpeedTime;
+
     public Integer getId() {
         return id;
     }
@@ -99,5 +109,45 @@ public class RoomStatus {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Integer getOnOffTime() {
+        return onOffTime;
+    }
+
+    public void setOnOffTime(Integer onOffTime) {
+        this.onOffTime = onOffTime;
+    }
+
+    public Integer getDispatchTimes() {
+        return dispatchTimes;
+    }
+
+    public void setDispatchTimes(Integer dispatchTimes) {
+        this.dispatchTimes = dispatchTimes;
+    }
+
+    public Integer getRdrNum() {
+        return rdrNum;
+    }
+
+    public void setRdrNum(Integer rdrNum) {
+        this.rdrNum = rdrNum;
+    }
+
+    public Integer getChangeTempTime() {
+        return changeTempTime;
+    }
+
+    public void setChangeTempTime(Integer changeTempTime) {
+        this.changeTempTime = changeTempTime;
+    }
+
+    public Integer getChangeSpeedTime() {
+        return changeSpeedTime;
+    }
+
+    public void setChangeSpeedTime(Integer changeSpeedTime) {
+        this.changeSpeedTime = changeSpeedTime;
     }
 }

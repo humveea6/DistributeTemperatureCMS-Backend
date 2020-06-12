@@ -703,6 +703,306 @@ public class RoomStatusExample {
             addCriterion("state not between", value1, value2, "state");
             return (Criteria) this;
         }
+
+        public Criteria andOnOffTimeIsNull() {
+            addCriterion("on_off_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeIsNotNull() {
+            addCriterion("on_off_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeEqualTo(Integer value) {
+            addCriterion("on_off_time =", value, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeNotEqualTo(Integer value) {
+            addCriterion("on_off_time <>", value, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeGreaterThan(Integer value) {
+            addCriterion("on_off_time >", value, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("on_off_time >=", value, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeLessThan(Integer value) {
+            addCriterion("on_off_time <", value, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeLessThanOrEqualTo(Integer value) {
+            addCriterion("on_off_time <=", value, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeIn(List<Integer> values) {
+            addCriterion("on_off_time in", values, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeNotIn(List<Integer> values) {
+            addCriterion("on_off_time not in", values, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeBetween(Integer value1, Integer value2) {
+            addCriterion("on_off_time between", value1, value2, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOnOffTimeNotBetween(Integer value1, Integer value2) {
+            addCriterion("on_off_time not between", value1, value2, "onOffTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesIsNull() {
+            addCriterion("dispatch_times is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesIsNotNull() {
+            addCriterion("dispatch_times is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesEqualTo(Integer value) {
+            addCriterion("dispatch_times =", value, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesNotEqualTo(Integer value) {
+            addCriterion("dispatch_times <>", value, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesGreaterThan(Integer value) {
+            addCriterion("dispatch_times >", value, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dispatch_times >=", value, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesLessThan(Integer value) {
+            addCriterion("dispatch_times <", value, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesLessThanOrEqualTo(Integer value) {
+            addCriterion("dispatch_times <=", value, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesIn(List<Integer> values) {
+            addCriterion("dispatch_times in", values, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesNotIn(List<Integer> values) {
+            addCriterion("dispatch_times not in", values, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesBetween(Integer value1, Integer value2) {
+            addCriterion("dispatch_times between", value1, value2, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimesNotBetween(Integer value1, Integer value2) {
+            addCriterion("dispatch_times not between", value1, value2, "dispatchTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumIsNull() {
+            addCriterion("rdr_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumIsNotNull() {
+            addCriterion("rdr_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumEqualTo(Integer value) {
+            addCriterion("rdr_num =", value, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumNotEqualTo(Integer value) {
+            addCriterion("rdr_num <>", value, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumGreaterThan(Integer value) {
+            addCriterion("rdr_num >", value, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("rdr_num >=", value, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumLessThan(Integer value) {
+            addCriterion("rdr_num <", value, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumLessThanOrEqualTo(Integer value) {
+            addCriterion("rdr_num <=", value, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumIn(List<Integer> values) {
+            addCriterion("rdr_num in", values, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumNotIn(List<Integer> values) {
+            addCriterion("rdr_num not in", values, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumBetween(Integer value1, Integer value2) {
+            addCriterion("rdr_num between", value1, value2, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andRdrNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("rdr_num not between", value1, value2, "rdrNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeIsNull() {
+            addCriterion("change_temp_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeIsNotNull() {
+            addCriterion("change_temp_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeEqualTo(Integer value) {
+            addCriterion("change_temp_time =", value, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeNotEqualTo(Integer value) {
+            addCriterion("change_temp_time <>", value, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeGreaterThan(Integer value) {
+            addCriterion("change_temp_time >", value, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("change_temp_time >=", value, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeLessThan(Integer value) {
+            addCriterion("change_temp_time <", value, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeLessThanOrEqualTo(Integer value) {
+            addCriterion("change_temp_time <=", value, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeIn(List<Integer> values) {
+            addCriterion("change_temp_time in", values, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeNotIn(List<Integer> values) {
+            addCriterion("change_temp_time not in", values, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeBetween(Integer value1, Integer value2) {
+            addCriterion("change_temp_time between", value1, value2, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeTempTimeNotBetween(Integer value1, Integer value2) {
+            addCriterion("change_temp_time not between", value1, value2, "changeTempTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeIsNull() {
+            addCriterion("change_speed_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeIsNotNull() {
+            addCriterion("change_speed_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeEqualTo(Integer value) {
+            addCriterion("change_speed_time =", value, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeNotEqualTo(Integer value) {
+            addCriterion("change_speed_time <>", value, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeGreaterThan(Integer value) {
+            addCriterion("change_speed_time >", value, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("change_speed_time >=", value, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeLessThan(Integer value) {
+            addCriterion("change_speed_time <", value, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeLessThanOrEqualTo(Integer value) {
+            addCriterion("change_speed_time <=", value, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeIn(List<Integer> values) {
+            addCriterion("change_speed_time in", values, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeNotIn(List<Integer> values) {
+            addCriterion("change_speed_time not in", values, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeBetween(Integer value1, Integer value2) {
+            addCriterion("change_speed_time between", value1, value2, "changeSpeedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeSpeedTimeNotBetween(Integer value1, Integer value2) {
+            addCriterion("change_speed_time not between", value1, value2, "changeSpeedTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

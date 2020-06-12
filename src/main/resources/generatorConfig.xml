@@ -44,7 +44,7 @@
 <!--        </table>-->
 <!--        <table tableName="mall_order" domainObjectName="Order"/>-->
 <!--        <table tableName="mall_order_item" domainObjectName="Orderitem"/>-->
-        <table tableName="room_serving_list" domainObjectName="RoomServingList">
+        <table tableName="room_status" domainObjectName="RoomStatus">
 <!--            <columnOverride column="detail" jdbcType="VARCHAR" />-->
 <!--            <columnOverride column="sub_images" jdbcType="VARCHAR" />-->
         </table>

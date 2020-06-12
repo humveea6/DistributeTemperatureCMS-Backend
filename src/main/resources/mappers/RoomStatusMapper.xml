@@ -12,6 +12,11 @@
     <result column="mode" jdbcType="INTEGER" property="mode" />
     <result column="end_time" jdbcType="BIGINT" property="endTime" />
     <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="on_off_time" jdbcType="INTEGER" property="onOffTime" />
+    <result column="dispatch_times" jdbcType="INTEGER" property="dispatchTimes" />
+    <result column="rdr_num" jdbcType="INTEGER" property="rdrNum" />
+    <result column="change_temp_time" jdbcType="INTEGER" property="changeTempTime" />
+    <result column="change_speed_time" jdbcType="INTEGER" property="changeSpeedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, room_id, current_temperature, target_temperature, fans_speed, fare_rate, start_up, 
-    mode, end_time, state
+    mode, end_time, state, on_off_time, dispatch_times, rdr_num, change_temp_time, change_speed_time
   </sql>
   <select id="selectByExample" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatusExample" resultMap="BaseResultMap">
     select
@@ -109,11 +114,15 @@
     insert into room_status (id, room_id, current_temperature, 
       target_temperature, fans_speed, fare_rate, 
       start_up, mode, end_time, 
-      state)
+      state, on_off_time, dispatch_times, 
+      rdr_num, change_temp_time, change_speed_time
+      )
     values (#{id,jdbcType=INTEGER}, #{roomId,jdbcType=BIGINT}, #{currentTemperature,jdbcType=DOUBLE}, 
       #{targetTemperature,jdbcType=DOUBLE}, #{fansSpeed,jdbcType=DOUBLE}, #{fareRate,jdbcType=DOUBLE}, 
       #{startUp,jdbcType=BIGINT}, #{mode,jdbcType=INTEGER}, #{endTime,jdbcType=BIGINT}, 
-      #{state,jdbcType=INTEGER})
+      #{state,jdbcType=INTEGER}, #{onOffTime,jdbcType=INTEGER}, #{dispatchTimes,jdbcType=INTEGER}, 
+      #{rdrNum,jdbcType=INTEGER}, #{changeTempTime,jdbcType=INTEGER}, #{changeSpeedTime,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.softwareengineering.temperaturecms.pojo.RoomStatus" useGeneratedKeys="true" keyProperty="id">
     insert into room_status
@@ -148,6 +157,21 @@
       <if test="state != null">
         state,
       </if>
+      <if test="onOffTime != null">
+        on_off_time,
+      </if>
+      <if test="dispatchTimes != null">
+        dispatch_times,
+      </if>
+      <if test="rdrNum != null">
+        rdr_num,
+      </if>
+      <if test="changeTempTime != null">
+        change_temp_time,
+      </if>
+      <if test="changeSpeedTime != null">
+        change_speed_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,6 +203,21 @@
       </if>
       <if test="state != null">
         #{state,jdbcType=INTEGER},
+      </if>
+      <if test="onOffTime != null">
+        #{onOffTime,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchTimes != null">
+        #{dispatchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="rdrNum != null">
+        #{rdrNum,jdbcType=INTEGER},
+      </if>
+      <if test="changeTempTime != null">
+        #{changeTempTime,jdbcType=INTEGER},
+      </if>
+      <if test="changeSpeedTime != null">
+        #{changeSpeedTime,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -221,6 +260,21 @@
       <if test="record.state != null">
         state = #{record.state,jdbcType=INTEGER},
       </if>
+      <if test="record.onOffTime != null">
+        on_off_time = #{record.onOffTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.dispatchTimes != null">
+        dispatch_times = #{record.dispatchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.rdrNum != null">
+        rdr_num = #{record.rdrNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.changeTempTime != null">
+        change_temp_time = #{record.changeTempTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.changeSpeedTime != null">
+        change_speed_time = #{record.changeSpeedTime,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +291,12 @@
       start_up = #{record.startUp,jdbcType=BIGINT},
       mode = #{record.mode,jdbcType=INTEGER},
       end_time = #{record.endTime,jdbcType=BIGINT},
-      state = #{record.state,jdbcType=INTEGER}
+      state = #{record.state,jdbcType=INTEGER},
+      on_off_time = #{record.onOffTime,jdbcType=INTEGER},
+      dispatch_times = #{record.dispatchTimes,jdbcType=INTEGER},
+      rdr_num = #{record.rdrNum,jdbcType=INTEGER},
+      change_temp_time = #{record.changeTempTime,jdbcType=INTEGER},
+      change_speed_time = #{record.changeSpeedTime,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +331,21 @@
       <if test="state != null">
         state = #{state,jdbcType=INTEGER},
       </if>
+      <if test="onOffTime != null">
+        on_off_time = #{onOffTime,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchTimes != null">
+        dispatch_times = #{dispatchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="rdrNum != null">
+        rdr_num = #{rdrNum,jdbcType=INTEGER},
+      </if>
+      <if test="changeTempTime != null">
+        change_temp_time = #{changeTempTime,jdbcType=INTEGER},
+      </if>
+      <if test="changeSpeedTime != null">
+        change_speed_time = #{changeSpeedTime,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -285,7 +359,12 @@
       start_up = #{startUp,jdbcType=BIGINT},
       mode = #{mode,jdbcType=INTEGER},
       end_time = #{endTime,jdbcType=BIGINT},
-      state = #{state,jdbcType=INTEGER}
+      state = #{state,jdbcType=INTEGER},
+      on_off_time = #{onOffTime,jdbcType=INTEGER},
+      dispatch_times = #{dispatchTimes,jdbcType=INTEGER},
+      rdr_num = #{rdrNum,jdbcType=INTEGER},
+      change_temp_time = #{changeTempTime,jdbcType=INTEGER},
+      change_speed_time = #{changeSpeedTime,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
