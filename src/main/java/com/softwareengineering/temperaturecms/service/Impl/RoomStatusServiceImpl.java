@@ -280,6 +280,16 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     }
 
     @Override
+    public Boolean updateRoomStatusInRedis(Integer id,RoomStatus roomStatus) {
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String redisKey = String.format(ROOM_SERVICE_REDIS_KEY,id);
+
+        opsForValue.set(redisKey,JsonUtils.toJson(roomStatus));
+
+        return true;
+    }
+
+    @Override
     public Long countByRoomId(Long roomId) {
         RoomStatusExample roomStatusExample = new RoomStatusExample();
         roomStatusExample.createCriteria().andRoomIdEqualTo(roomId);

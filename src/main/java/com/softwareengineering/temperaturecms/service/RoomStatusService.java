@@ -35,6 +35,8 @@ public interface RoomStatusService {
     //从Redis获取房间实时状况
     public RoomStatus getRoomStatusFromRedis(Integer id);
 
+    public Boolean updateRoomStatusInRedis(Integer id,RoomStatus roomStatus);
+
     public RoomDetailListVo getRoomDetail(Integer id);
 
     public InvoiceVo getInvoice(Integer id);
