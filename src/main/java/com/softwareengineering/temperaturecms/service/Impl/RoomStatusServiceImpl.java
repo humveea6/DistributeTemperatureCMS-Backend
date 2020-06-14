@@ -22,10 +22,9 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static com.softwareengineering.temperaturecms.consts.CMSConst.*;
 
@@ -49,71 +48,140 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     @Autowired
     private RoomServingListMapper roomServingListMapper;
 
-    private static List<RoomStatus> serviceList = new ArrayList<>();
-    private static List<RoomStatus> waitList = new ArrayList<>();
+    private static ReentrantLock queueLock = new ReentrantLock();
 
-    @Override
-    public RoomStatus deleteFromList(int id, int num) {
-        if (num == 0) {
-            for (int i = 0; i < serviceList.size(); i++) {
-                if (serviceList.get(i).getId() == id) {
-                    return serviceList.remove(i);
+    private static Queue<RoomStatus> waitingQueue = new LinkedList<>();
+
+    private static Queue<Future> waitingFuture = new LinkedList<>();
+
+    private static ExecutorService executorService =
+            new ThreadPoolExecutor(10,20,10,TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
+
+    private static TreeSet<RoomStatus> roomInservice = new TreeSet<>(new Comparator<RoomStatus>() {
+        @Override
+        public int compare(RoomStatus o1, RoomStatus o2) {
+            if(o1.getFansSpeed().equals(o2.getFansSpeed())){
+                if(o1.getLastWorkTime()<o2.getLastWorkTime()){
+                    return -1;
+                }
+                else {
+                    return 1;
                 }
             }
-        } else {
-            for (int i = 0; i < waitList.size(); i++) {
-                if (waitList.get(i).getId() == id) {
-                    return waitList.remove(i);
+            else{
+                if(o1.getFansSpeed()<o2.getFansSpeed()){
+                    return -1;
                 }
-            }
-        }
-        return new RoomStatus();
-    }
-
-    @Override
-    public void addToList(RoomStatus roomStatus, int num) {
-        if (num == 0) {
-            serviceList.add(roomStatus);
-            log.info("add service success");
-        } else {
-            waitList.add(roomStatus);
-            log.info("add wait success");
-        }
-    }
-
-    @Override
-    public int getListSize(int num) {
-        if (num == 0) {
-            return serviceList.size();
-        } else {
-            return waitList.size();
-        }
-    }
-
-    @Override
-    public void changeList(int id, RoomStatus roomStatus, int num) {
-        if (num == 0) {
-            for (int i = 0; i < serviceList.size(); i++) {
-                if (serviceList.get(i).getId() == id) {
-                    serviceList.set(i, roomStatus);
-                }
-            }
-        } else {
-            for (int i = 0; i < waitList.size(); i++) {
-                if (waitList.get(i).getId() == id) {
-                    waitList.set(i, roomStatus);
+                else{
+                    return 1;
                 }
             }
         }
+    });
+
+    @Override
+    public void addJob(RoomStatus roomStatus) {
+
+        if(roomInservice.size()<3){
+            roomStatus.setLastWorkTime(System.currentTimeMillis());
+            roomStatus.setState(StateEnum.IN_SERVICE.getState());
+            roomInservice.add(roomStatus);
+            updateRoomStatusInRedis(roomStatus.getId(),roomStatus);
+        }
+        else{
+            RoomStatus roomStatusFirst = roomInservice.first();
+            if(roomStatusFirst.getFansSpeed()<roomStatus.getFansSpeed()) {
+                roomStatusFirst.setState(StateEnum.WAITING.getState());
+
+                roomStatus.setState(StateEnum.IN_SERVICE.getState());
+                roomStatus.setLastWorkTime(System.currentTimeMillis());
+                roomInservice.remove(roomStatusFirst);
+                roomInservice.add(roomStatus);
+
+                updateRoomStatusInRedis(roomStatus.getId(), roomStatus);
+                updateRoomStatusInRedis(roomStatusFirst.getId(), roomStatusFirst);
+                waitingQueue.offer(roomStatusFirst);
+
+                createRDR(roomStatus.getId());
+                createRDR(roomStatusFirst.getId());
+            }
+            else {
+                waitingQueue.offer(roomStatus);
+                createRDR(roomStatus.getId());
+            }
+            Future submit = executorService.submit(new RoomWaitJob());
+            waitingFuture.offer(submit);
+
+        }
     }
 
     @Override
-    public List<RoomStatus> getList(int num) {
-        if (num == 0) {
-            return serviceList;
-        } else {
-            return waitList;
+    public void endJob(RoomStatus roomStatus) {
+        boolean remove = roomInservice.remove(roomStatus);
+        if(remove){
+            createRDR(roomStatus.getId());
+            try{
+                queueLock.lock();
+                Future poll = waitingFuture.poll();
+                poll.cancel(true);
+                RoomStatus poll1 = waitingQueue.poll();
+
+                poll1.setState(StateEnum.IN_SERVICE.getState());
+                poll1.setLastWorkTime(System.currentTimeMillis());
+                roomInservice.add(poll1);
+                updateRoomStatusInRedis(poll1.getId(),poll1);
+            }
+            finally {
+                queueLock.unlock();
+            }
         }
+    }
+
+    class RoomWaitJob implements Callable {
+        @Override
+        public Object call() throws Exception {
+            Thread.sleep(20*1000);
+            RoomStatus roomStatus = roomInservice.first();
+            for (RoomStatus roomStatus1 : roomInservice) {
+                if(roomStatus1.getLastWorkTime()<roomStatus.getLastWorkTime()){
+                    roomStatus=roomStatus1;
+                }
+            }
+            log.info("stop service "+JsonUtils.toJson(roomStatus));
+            roomStatus.setState(StateEnum.WAITING.getState());
+            updateRoomStatusInRedis(roomStatus.getId(),roomStatus);
+            roomInservice.remove(roomStatus);
+            createRDR(roomStatus.getId());
+            waitingQueue.offer(roomStatus);
+            Future submit = executorService.submit(new RoomWaitJob());
+            waitingFuture.offer(submit);
+
+            try {
+                queueLock.lock();
+                RoomStatus poll = waitingQueue.poll();
+                log.info("waiting service: "+JsonUtils.toJson(poll));
+                createRDR(poll.getId());
+                waitingFuture.poll();
+                poll.setState(StateEnum.IN_SERVICE.getState());
+                poll.setLastWorkTime(System.currentTimeMillis());
+                roomInservice.add(poll);
+                updateRoomStatusInRedis(poll.getId(),poll);
+            }
+            finally {
+                queueLock.unlock();
+            }
+
+            return null;
+        }
+    }
+
+    @Override
+    public void modify(RoomStatus roomStatus) {
+        Integer id = roomStatus.getId();
+        if(roomInservice.contains(roomStatus)){
+            roomInservice.remove(roomStatus);
+        }
+        roomInservice.add(roomStatus);
     }
 
     @Override
@@ -121,7 +189,8 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         RoomServingList roomServingList = new RoomServingList();
         RoomStatus roomStatus = getRoomStatusFromRedis(id);
 
-        roomServingList.setRoomId(id);
+        long roomId = roomStatus.getRoomId();
+        roomServingList.setRoomId((int)roomId);
         roomServingList.setStartTime(roomStatus.getStartUp() - roomStatus.getEndTime());
 
         // 原roomStatus中EndTime字段保存当前结束时间
@@ -141,66 +210,6 @@ public class RoomStatusServiceImpl implements RoomStatusService {
 
         updateRoomStatusInRedis(id, roomStatus);
         roomServingListMapper.insertSelective(roomServingList);
-    }
-
-    @Override
-    public void dispatch() {
-        while (serviceList.size() < 2 && waitList.size() > 0) {
-            // 获取一个优先级最高的房间，让其开始服务，即加入服务列表而从等待列表中删除
-            RoomStatus roomStatus = deleteFromList(getHighestPriority(), 1); // 从等待队列删除
-            // 更新redis数据为服务
-            roomStatus.setState(StateEnum.IN_SERVICE.getState());
-            updateRoomStatusInRedis(roomStatus.getId(), roomStatus);
-            // 加入服务队列
-            serviceList.add(roomStatus);
-        }
-        if (waitList.size() > 0) {
-            for (RoomStatus roomInService : serviceList) {
-                // 寻找剩下的里面，优先级最高的
-                int id = getHighestPriority();
-                RoomStatus highestPriority = getRoomStatusFromRedis(id);
-                log.info("HighestPriority {}", id);
-
-                // 优先级小于的话移除
-                if (roomInService.getFansSpeed() < highestPriority.getFansSpeed()) {
-                    swapService(roomInService, highestPriority);
-                    log.info("Higher,delete {}", roomInService.getId());
-                    createRDR(roomInService.getId()); // 为停止服务的对象创建详单
-                }
-                // 优先级相同的话，获取正在服务的房间的服务时间，如果到达2分钟，则换
-                else if (roomInService.getFansSpeed().equals(highestPriority.getFansSpeed())) {
-                    Long serviceTime = roomInService.getDuration();
-                    if (serviceTime >= 120*1000) {
-                        swapService(roomInService, highestPriority);
-                        log.info("Higher,delete {}", roomInService.getId());
-                        createRDR(roomInService.getId()); // 为停止服务的对象创建详单
-                    }
-                }
-            }
-        }
-
-    }
-
-    public void swapService(RoomStatus roomInService, RoomStatus highestPriority) {
-        RoomStatus roomStatus = deleteFromList(roomInService.getId(), 0);
-        serviceList.add(highestPriority);
-        waitList.add(roomStatus);
-
-        highestPriority.setState(StateEnum.IN_SERVICE.getState());
-        roomStatus.setState(StateEnum.WAITING.getState());
-
-        updateRoomStatusInRedis(roomInService.getId(), roomStatus);
-        updateRoomStatusInRedis(highestPriority.getId(), highestPriority);
-    }
-
-    public Integer getHighestPriority() {
-        RoomStatus highestPriority = waitList.get(0);
-        for (RoomStatus roomStatus : waitList) {
-            if (roomStatus.getFansSpeed() > highestPriority.getFansSpeed()) {
-                highestPriority = roomStatus;
-            }
-        }
-        return highestPriority.getId();
     }
 
 

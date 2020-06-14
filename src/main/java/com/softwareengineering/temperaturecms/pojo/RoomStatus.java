@@ -1,5 +1,7 @@
 package com.softwareengineering.temperaturecms.pojo;
 
+import java.util.Objects;
+
 public class RoomStatus {
     private Integer id;
 
@@ -36,6 +38,21 @@ public class RoomStatus {
     private Long duration;
 
     private Double currentFansSpeed;
+
+    private Long lastWorkTime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoomStatus that = (RoomStatus) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public Integer getId() {
         return id;
@@ -179,5 +196,13 @@ public class RoomStatus {
 
     public void setCurrentFansSpeed(Double currentFansSpeed) {
         this.currentFansSpeed = currentFansSpeed;
+    }
+
+    public Long getLastWorkTime() {
+        return lastWorkTime;
+    }
+
+    public void setLastWorkTime(Long lastWorkTime) {
+        this.lastWorkTime = lastWorkTime;
     }
 }

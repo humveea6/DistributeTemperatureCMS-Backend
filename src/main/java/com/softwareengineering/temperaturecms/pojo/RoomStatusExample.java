@@ -1183,6 +1183,66 @@ public class RoomStatusExample {
             addCriterion("current_fans_speed not between", value1, value2, "currentFansSpeed");
             return (Criteria) this;
         }
+
+        public Criteria andLastWorkTimeIsNull() {
+            addCriterion("last_work_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeIsNotNull() {
+            addCriterion("last_work_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeEqualTo(Long value) {
+            addCriterion("last_work_time =", value, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeNotEqualTo(Long value) {
+            addCriterion("last_work_time <>", value, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeGreaterThan(Long value) {
+            addCriterion("last_work_time >", value, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeGreaterThanOrEqualTo(Long value) {
+            addCriterion("last_work_time >=", value, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeLessThan(Long value) {
+            addCriterion("last_work_time <", value, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeLessThanOrEqualTo(Long value) {
+            addCriterion("last_work_time <=", value, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeIn(List<Long> values) {
+            addCriterion("last_work_time in", values, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeNotIn(List<Long> values) {
+            addCriterion("last_work_time not in", values, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeBetween(Long value1, Long value2) {
+            addCriterion("last_work_time between", value1, value2, "lastWorkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastWorkTimeNotBetween(Long value1, Long value2) {
+            addCriterion("last_work_time not between", value1, value2, "lastWorkTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

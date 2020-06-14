@@ -57,19 +57,25 @@ public interface RoomStatusService {
 
     public Double getRoomServiceTime(Integer id);
 
-    // 服务队列和等待队列相关
-    public void addToList(RoomStatus roomStatus,int num);
+    public void addJob(RoomStatus roomStatus);
 
-    public int getListSize(int num);
+    public void endJob(RoomStatus roomStatus);
 
-    public void changeList(int id,RoomStatus roomStatus, int num);
+    public void modify(RoomStatus roomStatus);
 
-    public RoomStatus deleteFromList(int id,int num);
-
-    public List<RoomStatus> getList(int num);
-
-    public void dispatch();
-
+//    // 服务队列和等待队列相关
+//    public void addToList(RoomStatus roomStatus,int num);
+//
+//    public int getListSize(int num);
+//
+//    public void changeList(int id,RoomStatus roomStatus, int num);
+//
+//    public RoomStatus deleteFromList(int id,int num);
+//
+//    public List<RoomStatus> getList(int num);
+//
+//    public void dispatch();
+//
     // 详单相关
     public void createRDR(Integer id);
 }

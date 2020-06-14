@@ -57,25 +57,7 @@ public class UserRequestController {
 
         RoomStatus roomStatus = roomStatusService.getRoomStatusFromRedis(id);
 
-
-        if (roomStatusService.getListSize(0) < 2)//若现在可以提供服务，服务队列<3
-        {
-            roomStatus.setOnOffTime(roomStatus.getOnOffTime() + 1); // 开关次数+1
-            roomStatus.setDispatchTimes(roomStatus.getDispatchTimes() + 1); //调度次数+1
-            roomStatus.setState(StateEnum.IN_SERVICE.getState());
-
-            roomStatusService.addToList(roomStatus, 0);
-            roomStatusService.updateRoomStatusInRedis(id, roomStatus);
-        } else {
-            roomStatus.setOnOffTime(roomStatus.getOnOffTime() + 1); // 开关次数+1
-            roomStatus.setDispatchTimes(roomStatus.getDispatchTimes() + 1); //调度次数+1
-            roomStatus.setState(StateEnum.WAITING.getState());
-
-            roomStatusService.addToList(roomStatus, 1);
-            roomStatusService.updateRoomStatusInRedis(id, roomStatus);
-
-        }
-
+        roomStatusService.addJob(roomStatus);
 
         return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
     }
@@ -92,10 +74,7 @@ public class UserRequestController {
         if (roomStatus.getState() == 0) {
             roomStatus.setChangeTempTime(roomStatus.getChangeTempTime() + 1);
             roomStatusService.updateRoomStatusInRedis(id, roomStatus);// 更新redis
-            roomStatusService.changeList(id, roomStatus, 0);// 更新服务队列的数据
-        } else if (roomStatus.getState() == 1)//若在等待
-        {
-            roomStatusService.changeList(id, roomStatus, 1);// 更新等待队列的数据，不写回redis
+            roomStatusService.modify(roomStatus);
         }
 
         return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
@@ -114,10 +93,7 @@ public class UserRequestController {
         if (roomStatus.getState() == 0) {
             roomStatus.setChangeSpeedTime(roomStatus.getChangeSpeedTime() + 1); //风速变更次数+1
             roomStatusService.updateRoomStatusInRedis(id, roomStatus);// 更新redis
-            roomStatusService.changeList(id, roomStatus, 0);// 更新服务队列的数据
-        } else if (roomStatus.getState() == 1)//若在等待
-        {
-            roomStatusService.changeList(id, roomStatus, 1);// 更新等待队列的数据
+            roomStatusService.modify(roomStatus);
         }
 
         return WebResultUtil.buildResult(ResponseVo.successByMsg(), HttpStatus.OK);
@@ -135,14 +111,7 @@ public class UserRequestController {
 
         roomStatusService.createRDR(id); //关机创建详单
 
-        // 把对象从队列中删除
-        if (roomStatus.getState() == 0) {
-            roomStatusService.deleteFromList(id, 0);
-            log.info("delete 0");
-        } else if (roomStatus.getState() == 1) {
-            roomStatusService.deleteFromList(id, 1);
-            log.info("delete 1");
-        }
+        roomStatusService.endJob(roomStatus);
 
         roomStatus.setState(StateEnum.SHUTDOWN.getState()); //设置状态
         roomStatusService.updateRoomStatusInRedis(id, roomStatus);
@@ -167,14 +136,7 @@ public class UserRequestController {
 
         if (currentTemperature.equals(roomStatus.getTargetTemperature()) && changeTemperature == 0) // 达到目标温度
         {
-            // 把对象从队列中删除
-            if (roomStatus.getState() == 0) {
-                roomStatusService.deleteFromList(id, 0);
-                log.info("delete 0");
-            } else if (roomStatus.getState() == 1) {
-                roomStatusService.deleteFromList(id, 1);
-                log.info("delete 1");
-            }
+
             // 达到目标温度
             roomStatus.setState(StateEnum.FREE.getState());
         } else {
@@ -184,11 +146,11 @@ public class UserRequestController {
                 //todo:计费
                 roomStatus.setFee(roomStatus.getFee() + changeTemperature);// 1元/度，在基础上加上温度值即可
 
-                roomStatusService.changeList(id, roomStatus, 0);
+                roomStatusService.modify(roomStatus);
+
             }
         }
         roomStatusService.updateRoomStatusInRedis(id, roomStatus);
-        roomStatusService.dispatch(); // 调度更新队列次序
 
         Map<String, Object> res = new HashMap<>();
         res.put("id", id);
