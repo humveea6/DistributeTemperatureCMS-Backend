@@ -118,6 +118,10 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     @Override
     public void endJob(RoomStatus roomStatus) {
         boolean remove = roomInservice.remove(roomStatus);
+        roomStatus.setState(StateEnum.SHUTDOWN.getState());
+        updateRoomStatusInRedis(roomStatus.getId(),roomStatus);
+        createRDR(roomStatus.getId());
+        
         if(remove){
             createRDR(roomStatus.getId());
             try{
@@ -140,7 +144,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     class RoomWaitJob implements Callable {
         @Override
         public Object call() throws Exception {
-            Thread.sleep(20*1000);
+            Thread.sleep(4*1000);
             RoomStatus roomStatus = roomInservice.first();
             for (RoomStatus roomStatus1 : roomInservice) {
                 if(roomStatus1.getLastWorkTime()<roomStatus.getLastWorkTime()){

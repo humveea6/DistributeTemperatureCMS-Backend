@@ -139,6 +139,7 @@ public class UserRequestController {
 
             // 达到目标温度
             roomStatus.setState(StateEnum.FREE.getState());
+            roomStatusService.endJob(roomStatus);
         } else {
             if (roomStatus.getState() == 0) {
                 //todo:服务时长+1
