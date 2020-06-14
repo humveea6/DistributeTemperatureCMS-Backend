@@ -191,7 +191,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
 
         long roomId = roomStatus.getRoomId();
         roomServingList.setRoomId((int)roomId);
-        roomServingList.setStartTime(roomStatus.getStartUp() - roomStatus.getEndTime());
+        roomServingList.setStartTime(roomStatus.getLastWorkTime());
 
         // 原roomStatus中EndTime字段保存当前结束时间
         long endTime = System.currentTimeMillis();
