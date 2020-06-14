@@ -120,7 +120,6 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     @Override
     public void endJob(RoomStatus roomStatus) {
         boolean remove = roomInservice.remove(roomStatus);
-        roomStatus.setState(StateEnum.SHUTDOWN.getState());
         updateRoomStatusInRedis(roomStatus.getId(),roomStatus);
         createRDR(roomStatus.getId());
 
