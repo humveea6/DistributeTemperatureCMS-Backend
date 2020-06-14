@@ -140,7 +140,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     class RoomWaitJob implements Callable {
         @Override
         public Object call() throws Exception {
-            Thread.sleep(20*1000);
+            Thread.sleep(4*1000);
             RoomStatus roomStatus = roomInservice.first();
             for (RoomStatus roomStatus1 : roomInservice) {
                 if(roomStatus1.getLastWorkTime()<roomStatus.getLastWorkTime()){
