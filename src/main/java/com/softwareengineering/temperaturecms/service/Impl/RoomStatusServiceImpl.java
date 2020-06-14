@@ -108,6 +108,8 @@ public class RoomStatusServiceImpl implements RoomStatusService {
             else {
                 waitingQueue.offer(roomStatus);
                 createRDR(roomStatus.getId());
+                roomStatus.setState(StateEnum.WAITING.getState());
+                updateRoomStatusInRedis(roomStatus.getId(),roomStatus);
             }
             Future submit = executorService.submit(new RoomWaitJob());
             waitingFuture.offer(submit);
@@ -121,7 +123,7 @@ public class RoomStatusServiceImpl implements RoomStatusService {
         roomStatus.setState(StateEnum.SHUTDOWN.getState());
         updateRoomStatusInRedis(roomStatus.getId(),roomStatus);
         createRDR(roomStatus.getId());
-        
+
         if(remove){
             createRDR(roomStatus.getId());
             try{
