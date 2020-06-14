@@ -56,4 +56,26 @@ public interface RoomStatusService {
     public StateEnum getRoomServingState(Integer id);
 
     public Double getRoomServiceTime(Integer id);
+
+    public void addJob(RoomStatus roomStatus);
+
+    public void endJob(RoomStatus roomStatus);
+
+    public void modify(RoomStatus roomStatus);
+
+//    // 服务队列和等待队列相关
+//    public void addToList(RoomStatus roomStatus,int num);
+//
+//    public int getListSize(int num);
+//
+//    public void changeList(int id,RoomStatus roomStatus, int num);
+//
+//    public RoomStatus deleteFromList(int id,int num);
+//
+//    public List<RoomStatus> getList(int num);
+//
+//    public void dispatch();
+//
+    // 详单相关
+    public void createRDR(Integer id);
 }

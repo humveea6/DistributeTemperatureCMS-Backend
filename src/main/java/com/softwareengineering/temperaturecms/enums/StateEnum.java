@@ -9,6 +9,7 @@ public enum StateEnum {
     IN_SERVICE(0,"IN_SERVICE"),
     WAITING(1,"WAITING"),
     FREE(2,"FREE"),
+    SHUTDOWN(3,"SHUTDOWN"),
     NO_SUCH_ROOM(-1,"NO_SUCH_ROOM")
     ;
 
